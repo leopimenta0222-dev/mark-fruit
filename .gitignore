@@ -1,0 +1,28 @@
+# Dependências
+node_modules
+
+# Builds
+dist
+build
+
+# Variáveis de ambiente (NUNCA commitar segredos!)
+.env
+.env.local
+.env.production
+
+# Banco local / uploads
+*.db
+*.db-journal
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Vercel
+.vercel
+
+# Config local do Claude Code
+.claude/settings.local.json
+
+# Logs e sistema
+*.log
+.DS_Store
+Thumbs.db
