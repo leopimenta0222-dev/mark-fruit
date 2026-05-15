@@ -1,0 +1,113 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Mark Fruit: Iniciar tudo",
+      "dependsOn": ["Mark Fruit: Backend", "Mark Fruit: Frontend"],
+      "dependsOrder": "parallel",
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "Mark Fruit: Backend",
+      "type": "shell",
+      "command": "node",
+      "args": ["src/server.js"],
+      "options": { "cwd": "${workspaceFolder}/backend" },
+      "isBackground": true,
+      "presentation": {
+        "panel": "dedicated",
+        "group": "markfruit",
+        "reveal": "always",
+        "showReuseMessage": false
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Mark Fruit: Frontend",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "dev"],
+      "options": { "cwd": "${workspaceFolder}/frontend" },
+      "windows": {
+        "options": {
+          "shell": { "executable": "cmd.exe", "args": ["/c"] },
+          "cwd": "${workspaceFolder}/frontend"
+        }
+      },
+      "isBackground": true,
+      "presentation": {
+        "panel": "dedicated",
+        "group": "markfruit",
+        "reveal": "always",
+        "showReuseMessage": false
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Mark Fruit: Configurar (primeira vez)",
+      "dependsOn": [
+        "_install-backend",
+        "_install-frontend",
+        "_prisma-migrate",
+        "_seed"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    },
+    {
+      "label": "_install-backend",
+      "type": "shell",
+      "command": "npm",
+      "args": ["install"],
+      "options": { "cwd": "${workspaceFolder}/backend" },
+      "windows": {
+        "options": {
+          "shell": { "executable": "cmd.exe", "args": ["/c"] },
+          "cwd": "${workspaceFolder}/backend"
+        }
+      },
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "_install-frontend",
+      "type": "shell",
+      "command": "npm",
+      "args": ["install"],
+      "options": { "cwd": "${workspaceFolder}/frontend" },
+      "windows": {
+        "options": {
+          "shell": { "executable": "cmd.exe", "args": ["/c"] },
+          "cwd": "${workspaceFolder}/frontend"
+        }
+      },
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "_prisma-migrate",
+      "type": "shell",
+      "command": "npx",
+      "args": ["prisma", "migrate", "dev", "--name", "init"],
+      "options": { "cwd": "${workspaceFolder}/backend" },
+      "windows": {
+        "options": {
+          "shell": { "executable": "cmd.exe", "args": ["/c"] },
+          "cwd": "${workspaceFolder}/backend"
+        }
+      },
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "_seed",
+      "type": "shell",
+      "command": "node",
+      "args": ["src/lib/seed.js"],
+      "options": { "cwd": "${workspaceFolder}/backend" },
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    }
+  ]
+}
