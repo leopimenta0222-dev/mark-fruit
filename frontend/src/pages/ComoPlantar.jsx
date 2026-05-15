@@ -11,7 +11,7 @@ export default function ComoPlantar() {
     {
       role: "bot",
       content:
-        "Olá! 🌱 Eu sou o **PlantaBot**, posso te ensinar a cultivar várias plantas.\n\nÉ só me perguntar coisas como _\"como plantar tomate?\"_ ou clicar em uma das opções abaixo.",
+        "Olá! Eu sou o **PlantaBot**, posso te ensinar a cultivar várias plantas.\n\nÉ só me perguntar coisas como _\"como plantar tomate?\"_ ou clicar em uma das opções abaixo.",
     },
   ]);
   const [input, setInput] = useState("");
@@ -49,7 +49,7 @@ export default function ComoPlantar() {
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-100 text-brand-700 text-sm font-semibold mb-3">
           <Sparkles size={14}/> Aprenda a cultivar
         </div>
-        <h1 className="text-3xl md:text-4xl font-extrabold">Como plantar 🌱</h1>
+        <h1 className="text-3xl md:text-4xl font-extrabold">Como plantar</h1>
         <p className="text-stone-600 mt-2">
           Tire suas dúvidas com o PlantaBot e compre sementes direto dos nossos produtores.
         </p>
@@ -106,7 +106,7 @@ export default function ComoPlantar() {
                     onClick={() => ask(`Como plantar ${t.name.toLowerCase()}?`)}
                     className="text-xs px-3 py-1.5 rounded-full bg-stone-100 hover:bg-brand-100 hover:text-brand-700 transition"
                   >
-                    🌱 {t.name}
+                    {t.name}
                   </button>
                 ))}
               </div>

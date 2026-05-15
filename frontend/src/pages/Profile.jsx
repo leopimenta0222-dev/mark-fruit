@@ -63,7 +63,7 @@ export default function Profile() {
           <div className="flex-1">
             <h1 className="text-2xl font-bold">{user.name}</h1>
             <span className="inline-block mt-1 px-3 py-0.5 rounded-full text-xs font-semibold bg-brand-100 text-brand-700">
-              {user.role === "PRODUCER" ? "🚜 Produtor" : "🛒 Consumidor"}
+              {user.role === "PRODUCER" ? "Produtor" : "Consumidor"}
             </span>
           </div>
           {!edit && (

@@ -35,7 +35,7 @@ export default function Login() {
             <Sprout size={28}/>
           </div>
           <h1 className="text-2xl font-bold">Entrar no Mark Fruit</h1>
-          <p className="text-stone-500 text-sm">Bem-vindo de volta 🌱</p>
+          <p className="text-stone-500 text-sm">Bem-vindo de volta</p>
         </div>
 
         <form onSubmit={onSubmit} className="space-y-4">
@@ -81,7 +81,7 @@ export default function Login() {
         </p>
 
         <div className="mt-6 p-3 bg-stone-50 rounded-lg text-xs text-stone-600 space-y-1">
-          <p className="font-semibold">🧪 Logins de teste (senha: 123456):</p>
+          <p className="font-semibold">Logins de teste (senha: 123456):</p>
           <p>• Consumidor: ana@markfruit.com</p>
           <p>• Produtor: joaquim@markfruit.com</p>
         </div>

@@ -30,7 +30,7 @@ export default function App() {
         </Routes>
       </main>
       <footer className="border-t border-stone-100 bg-white py-6 text-center text-sm text-stone-500">
-        🌱 Mark Fruit — TCC by Maria, Maria, Luiza & Yago
+        Mark Fruit — TCC por Maria, Maria, Luiza e Yago
       </footer>
     </div>
   );

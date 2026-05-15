@@ -74,10 +74,10 @@ export default function Home() {
       {/* Hero / Banner */}
       {!isFiltering && (
         <section className="bg-gradient-to-r from-brand-600 via-brand-500 to-emerald-500 text-white">
-          <div className="max-w-7xl mx-auto px-4 py-8 md:py-12 grid md:grid-cols-2 gap-6 items-center">
-            <div>
+          <div className="max-w-7xl mx-auto px-4 py-10 md:py-14">
+            <div className="max-w-2xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 text-xs font-bold mb-3">
-                🌱 100% direto do produtor
+                100% direto do produtor
               </div>
               <h1 className="text-3xl md:text-5xl font-extrabold leading-tight">
                 Frutas, verduras e plantas <span className="text-amber-200">fresquinhas</span>
@@ -94,7 +94,6 @@ export default function Home() {
                 </Link>
               </div>
             </div>
-            <div className="hidden md:flex justify-end gap-6 text-9xl">🍅🥬🌽</div>
           </div>
         </section>
       )}
@@ -165,7 +164,7 @@ export default function Home() {
               <SkeletonGrid/>
             ) : allPosts.length === 0 ? (
               <div className="text-center py-12 text-stone-500">
-                <p className="text-lg">Nada encontrado por aqui 🥲</p>
+                <p className="text-lg">Nada encontrado por aqui</p>
                 <p className="text-sm mt-1">Tente outra busca ou categoria.</p>
               </div>
             ) : (

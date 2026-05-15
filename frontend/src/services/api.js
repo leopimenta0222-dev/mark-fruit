@@ -15,10 +15,12 @@ api.interceptors.request.use((config) => {
 });
 
 // Resolve a URL de uma imagem de produto.
-// Fotos do seed são URLs completas (http...). Uploads de produtores
-// são caminhos relativos (/uploads/...) que precisam do domínio do backend.
+// - http/data: usa como está
+// - /products/...: imagens do seed, servidas pelo próprio frontend
+// - /uploads/...: imagens enviadas por produtores, servidas pelo backend
 export function resolveImage(src) {
   if (!src) return "";
   if (src.startsWith("http") || src.startsWith("data:")) return src;
+  if (src.startsWith("/products/")) return src;
   return `${API_BASE}${src}`;
 }

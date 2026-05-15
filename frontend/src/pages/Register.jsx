@@ -42,7 +42,7 @@ export default function Register() {
             <Sprout size={28}/>
           </div>
           <h1 className="text-2xl font-bold">Criar conta</h1>
-          <p className="text-stone-500 text-sm">Junte-se ao Mark Fruit 🌱</p>
+          <p className="text-stone-500 text-sm">Junte-se ao Mark Fruit</p>
         </div>
 
         <div className="grid grid-cols-2 gap-3 mb-6">

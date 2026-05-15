@@ -42,7 +42,7 @@ export default function Navbar() {
             </div>
             <div className="hidden sm:block leading-tight">
               <div className="font-extrabold text-lg">Mark Fruit</div>
-              <div className="text-[10px] text-brand-100">Direto do produtor 🌱</div>
+              <div className="text-[10px] text-brand-100">Direto do produtor</div>
             </div>
           </Link>
 
@@ -84,7 +84,7 @@ export default function Navbar() {
                     <div className="px-4 py-2 border-b border-stone-100">
                       <p className="font-semibold text-sm">{user.name}</p>
                       <p className="text-xs text-stone-500">
-                        {user.role === "PRODUCER" ? "🚜 Produtor" : "🛒 Consumidor"}
+                        {user.role === "PRODUCER" ? "Produtor" : "Consumidor"}
                       </p>
                     </div>
                     <Link to="/perfil" className="flex items-center gap-2 px-4 py-2 hover:bg-stone-50 text-sm">
