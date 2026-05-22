@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Upload, Image as ImageIcon, Sprout } from "lucide-react";
-import { api } from "../services/api.js";
+import { uploadPostImage, createPost } from "../services/db.js";
+import { useAuth } from "../context/AuthContext.jsx";
 
 const CATEGORIES = ["Frutas", "Verduras", "Plantas", "Sementes"];
 
 export default function NewPost() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -44,20 +46,20 @@ export default function NewPost() {
     }
     setLoading(true);
     try {
-      const data = new FormData();
-      data.append("title", form.title);
-      data.append("description", form.description);
-      data.append("price", form.price);
-      data.append("category", form.category);
-      data.append("stock", form.stock);
-      data.append("isSeed", form.isSeed);
-      data.append("image", file);
-      const { data: post } = await api.post("/posts", data, {
-        headers: { "Content-Type": "multipart/form-data" },
+      const imageUrl = await uploadPostImage(file, user.id);
+      const post = await createPost({
+        title: form.title,
+        description: form.description,
+        price: form.price,
+        category: form.category,
+        isSeed: form.isSeed,
+        stock: form.stock,
+        imageUrl,
+        authorId: user.id,
       });
       navigate(`/post/${post.id}`);
     } catch (err) {
-      setError(err.response?.data?.error || "Erro ao criar anúncio");
+      setError(err.message || "Erro ao criar anúncio");
     } finally {
       setLoading(false);
     }

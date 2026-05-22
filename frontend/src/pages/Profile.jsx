@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Save, MapPin, Phone, Mail, User as UserIcon, Edit3 } from "lucide-react";
-import { api } from "../services/api.js";
+import { updateProfile } from "../services/db.js";
 import { useAuth } from "../context/AuthContext.jsx";
 
 export default function Profile() {
@@ -28,7 +28,7 @@ export default function Profile() {
     setSaving(true);
     setMsg("");
     try {
-      await api.put("/users/me", form);
+      await updateProfile(user.id, form);
       await refresh();
       setEdit(false);
       setMsg("Perfil atualizado!");
@@ -43,7 +43,7 @@ export default function Profile() {
   async function useMyLocation() {
     if (!navigator.geolocation) return;
     navigator.geolocation.getCurrentPosition(async (pos) => {
-      await api.put("/users/me", {
+      await updateProfile(user.id, {
         latitude: pos.coords.latitude,
         longitude: pos.coords.longitude,
       });

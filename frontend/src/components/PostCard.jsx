@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { MapPin, Truck } from "lucide-react";
 import Stars from "./Stars.jsx";
-import { resolveImage } from "../services/api.js";
+import { resolveImage } from "../services/supabase.js";
 
 function fmtPrice(v) {
   return v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });

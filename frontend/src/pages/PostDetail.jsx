@@ -4,7 +4,8 @@ import {
   MessageCircle, MapPin, Send, Trash2, ShoppingCart, Zap, Truck,
   ShieldCheck, RotateCcw, ChevronRight, Minus, Plus, Store, Heart
 } from "lucide-react";
-import { api, resolveImage } from "../services/api.js";
+import { resolveImage } from "../services/supabase.js";
+import { getPost, ratePost, deleteRating, deletePost } from "../services/db.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import Stars from "../components/Stars.jsx";
 
@@ -35,16 +36,19 @@ export default function PostDetail() {
 
   async function load() {
     setLoading(true);
-    const { data } = await api.get(`/posts/${id}`);
-    setPost(data);
-    setLoading(false);
-    setQty(1);
-    const myRating = data.ratings.find((r) => r.userId === user?.id);
-    if (myRating) {
-      setStars(myRating.stars);
-      setComment(myRating.comment || "");
-    } else {
-      setStars(0); setComment("");
+    try {
+      const data = await getPost(id);
+      setPost(data);
+      setQty(1);
+      const myRating = data.ratings.find((r) => r.userId === user?.id);
+      if (myRating) {
+        setStars(myRating.stars);
+        setComment(myRating.comment || "");
+      } else {
+        setStars(0); setComment("");
+      }
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -54,7 +58,7 @@ export default function PostDetail() {
     if (!stars) return;
     setSubmitting(true);
     try {
-      await api.post(`/posts/${id}/ratings`, { stars, comment });
+      await ratePost(post.id, user.id, stars, comment);
       await load();
     } finally {
       setSubmitting(false);
@@ -63,13 +67,13 @@ export default function PostDetail() {
 
   async function deleteMyRating() {
     if (!confirm("Remover sua avaliação?")) return;
-    await api.delete(`/posts/${id}/ratings`);
+    await deleteRating(post.id, user.id);
     await load();
   }
 
-  async function deletePost() {
+  async function handleDeletePost() {
     if (!confirm("Excluir este anúncio?")) return;
-    await api.delete(`/posts/${id}`);
+    await deletePost(post.id);
     navigate("/");
   }
 
@@ -252,7 +256,7 @@ export default function PostDetail() {
                     <p className="text-xs text-center text-stone-500 bg-stone-100 rounded-lg py-2">
                       Este é o seu anúncio
                     </p>
-                    <button onClick={deletePost} className="btn-danger w-full !py-2.5">
+                    <button onClick={handleDeletePost} className="btn-danger w-full !py-2.5">
                       <Trash2 size={16}/> Excluir anúncio
                     </button>
                   </div>

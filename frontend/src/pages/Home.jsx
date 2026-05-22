@@ -4,7 +4,7 @@ import {
   Search, MapPin, TrendingUp, Sparkles, Flame, Star, Apple, Salad, Flower2,
   Sprout as SeedIcon, Truck, ShieldCheck, BookOpen
 } from "lucide-react";
-import { api } from "../services/api.js";
+import { listPosts } from "../services/db.js";
 import PostCard from "../components/PostCard.jsx";
 import Shelf from "../components/Shelf.jsx";
 
@@ -40,13 +40,21 @@ export default function Home() {
 
   async function fetchPosts() {
     setLoading(true);
-    const params = { sort: "best" };
-    if (q) params.q = q;
-    if (filterCategory) params.category = filterCategory;
-    if (coords) { params.lat = coords.lat; params.lon = coords.lon; }
-    const { data } = await api.get("/posts", { params });
-    setAllPosts(data);
-    setLoading(false);
+    try {
+      const data = await listPosts({
+        sort: "best",
+        q: q || undefined,
+        category: filterCategory || undefined,
+        lat: coords?.lat,
+        lon: coords?.lon,
+      });
+      setAllPosts(data);
+    } catch (err) {
+      console.error(err);
+      setAllPosts([]);
+    } finally {
+      setLoading(false);
+    }
   }
 
   // Prateleiras

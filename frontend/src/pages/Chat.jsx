@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Send, ArrowLeft } from "lucide-react";
-import { io } from "socket.io-client";
-import { api, API_BASE, resolveImage } from "../services/api.js";
+import { resolveImage } from "../services/supabase.js";
+import { getPost, getProfile, getMessages, sendMessage, subscribeMessages } from "../services/db.js";
 import { useAuth } from "../context/AuthContext.jsx";
 
 export default function Chat() {
@@ -12,55 +12,42 @@ export default function Chat() {
   const [otherUser, setOtherUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
-  const socketRef = useRef(null);
   const listRef = useRef(null);
 
   useEffect(() => {
-    Promise.all([
-      api.get(`/posts/${postId}`).then((r) => setPost(r.data)),
-      api.get(`/users/${otherUserId}`).then((r) => setOtherUser(r.data)),
-      api.get(`/posts/${postId}/messages/${otherUserId}`).then((r) => setMessages(r.data)),
-    ]);
-  }, [postId, otherUserId]);
+    getPost(postId).then(setPost).catch(() => {});
+    getProfile(otherUserId).then(setOtherUser).catch(() => {});
+    getMessages(postId, user.id, otherUserId).then(setMessages).catch(() => {});
+  }, [postId, otherUserId, user.id]);
 
   useEffect(() => {
-    const token = localStorage.getItem("markfruit:token");
-    // Em dev: API_BASE vazio -> conecta no mesmo host (proxy do Vite).
-    // Em prod: conecta direto no backend do Render.
-    const socket = API_BASE
-      ? io(API_BASE, { auth: { token } })
-      : io({ auth: { token } });
-    socketRef.current = socket;
-    socket.on("chat:message", (msg) => {
-      const samePost = msg.postId === Number(postId);
-      const sameChat =
-        (msg.senderId === user.id && msg.receiverId === Number(otherUserId)) ||
-        (msg.senderId === Number(otherUserId) && msg.receiverId === user.id);
-      if (samePost && sameChat) {
-        setMessages((m) => {
-          if (m.some((x) => x.id === msg.id)) return m;
-          return [...m, msg];
-        });
-      }
+    // Realtime do Supabase: ouve novas mensagens desta conversa
+    const unsub = subscribeMessages(Number(postId), user.id, otherUserId, (msg) => {
+      setMessages((m) => (m.some((x) => x.id === msg.id) ? m : [...m, msg]));
     });
-    return () => socket.disconnect();
+    return unsub;
   }, [postId, otherUserId, user.id]);
 
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: "smooth" });
   }, [messages]);
 
-  function send(e) {
+  async function send(e) {
     e.preventDefault();
     if (!text.trim()) return;
-    socketRef.current.emit(
-      "chat:send",
-      { postId: Number(postId), receiverId: Number(otherUserId), content: text },
-      (resp) => {
-        if (resp?.error) console.error(resp.error);
-      }
-    );
+    const content = text.trim();
     setText("");
+    try {
+      const msg = await sendMessage(Number(postId), user.id, otherUserId, content);
+      // adiciona logo (o realtime também chega, mas evitamos duplicar por id)
+      setMessages((m) => (m.some((x) => x.id === msg.id) ? m : [...m, {
+        id: msg.id, content: msg.content, senderId: msg.sender_id,
+        receiverId: msg.receiver_id, createdAt: msg.created_at,
+      }]));
+    } catch (err) {
+      console.error(err);
+      setText(content);
+    }
   }
 
   if (!post || !otherUser) return <div className="p-8 text-center text-stone-500">Carregando...</div>;

@@ -1,17 +1,17 @@
-# 🌱 Mark Fruit
+# Mark Fruit
 
 Marketplace nichado para hortifruti — frutas, verduras, plantas e sementes direto do produtor para o consumidor.
 
-> **TCC** — Maria, Maria, Luiza & Yago
+> **TCC** — Maria, Maria, Luiza e Yago
 
 ---
 
-## ✨ Funcionalidades
+## Funcionalidades
 
 ### Consumidor
 - Cadastro e login
 - Perfil editável
-- Tela inicial com busca e melhores posts (avaliação + proximidade)
+- Tela inicial com busca e melhores anúncios (avaliação + proximidade)
 - Seção "Como Plantar" com bot e loja de sementes
 - Chat em tempo real com produtores
 - Avaliação dos produtos
@@ -25,134 +25,82 @@ Marketplace nichado para hortifruti — frutas, verduras, plantas e sementes dir
 
 ---
 
-## 🛠️ Stack
+## Tecnologias
 
-| Camada    | Tecnologias                                                 |
-| --------- | ----------------------------------------------------------- |
-| Frontend  | React 18 · Vite · TailwindCSS · React Router · Axios · Socket.io-client · Lucide icons |
-| Backend   | Node.js · Express · JWT · bcrypt · Multer · Socket.io       |
-| Banco     | SQLite (file-based) · Prisma ORM                            |
-| Bot       | Base de conhecimento local (em `backend/src/routes/bot.js`) |
+| Camada | Tecnologia |
+| ------ | ---------- |
+| Linguagem | JavaScript (ES6+), JSX, HTML5, CSS3, SQL |
+| Frontend | React 18 · Vite · TailwindCSS · React Router |
+| Backend / API | **Supabase** (BaaS) |
+| Banco de dados | PostgreSQL (gerenciado pelo Supabase) |
+| Autenticação | Supabase Auth |
+| Segurança | Row Level Security (RLS) |
+| Tempo real | Supabase Realtime (chat) |
+| Armazenamento | Supabase Storage (imagens dos anúncios) |
+| Hospedagem | Vercel (frontend) |
+
+O sistema **não tem servidor próprio**: o site (React) conversa direto com a API
+do Supabase, que cuida do banco, autenticação, tempo real e armazenamento.
 
 ---
 
-## 📁 Estrutura
+## Estrutura
 
 ```
 mark-fruit/
-├── backend/
-│   ├── prisma/
-│   │   └── schema.prisma            # tabelas do banco
-│   ├── src/
-│   │   ├── lib/                     # prisma client + seed
-│   │   ├── middleware/auth.js       # autenticação JWT
-│   │   ├── routes/
-│   │   │   ├── auth.js              # /api/auth/{register,login}
-│   │   │   ├── users.js             # /api/users/me, /:id
-│   │   │   ├── posts.js             # /api/posts (CRUD + busca/ordenação)
-│   │   │   ├── ratings.js           # /api/posts/:id/ratings
-│   │   │   ├── messages.js          # /api/conversations, /api/posts/:id/messages
-│   │   │   └── bot.js               # /api/bot/{ask,topics}
-│   │   └── server.js                # Express + Socket.io
-│   ├── uploads/                     # imagens enviadas
-│   ├── .env                         # configuração local
-│   └── package.json
-└── frontend/
-    ├── src/
-    │   ├── components/              # Navbar, PostCard, Stars, PrivateRoute
-    │   ├── context/AuthContext.jsx  # estado global de autenticação
-    │   ├── pages/                   # Home, Login, Register, Profile, NewPost,
-    │   │                            # PostDetail, ComoPlantar, Conversations, Chat
-    │   ├── services/api.js          # cliente axios
-    │   └── main.jsx + App.jsx
-    └── package.json
+├── frontend/                 # aplicação React (Vite)
+│   ├── public/products/      # imagens dos produtos (locais)
+│   └── src/
+│       ├── components/       # Navbar, PostCard, Stars, Shelf...
+│       ├── context/          # AuthContext (Supabase Auth)
+│       ├── data/             # plantBot (bot "Como Plantar")
+│       ├── pages/            # Home, Login, Register, PostDetail, Chat...
+│       └── services/
+│           ├── supabase.js   # cliente Supabase
+│           └── db.js         # queries (posts, ratings, chat...)
+└── supabase/
+    ├── schema.sql            # tabelas + RLS + storage + realtime
+    └── seed.mjs              # popula produtos e usuários de teste
 ```
 
 ---
 
-## 🚀 Como rodar (passo a passo)
+## Como rodar localmente
 
-### Pré-requisitos
-- Node.js 18+ (testado em v24)
-- npm
+Pré-requisitos: Node.js e um projeto no Supabase.
 
-### 1. Backend
+### 1. Configurar o banco (uma vez)
+1. Crie um projeto em https://supabase.com
+2. No **SQL Editor**, rode todo o conteúdo de `supabase/schema.sql`
+3. Em **Authentication > Providers > Email**, desative "Confirm email"
+4. Popule os dados:
+   ```bash
+   cd supabase
+   npm install
+   # crie supabase/.env (veja .env.example) com URL e service_role key
+   npm run seed
+   ```
 
-```powershell
-cd backend
-npm install
-npx prisma migrate dev --name init   # cria o banco SQLite
-node src/lib/seed.js                  # popula com dados de exemplo
-npm run dev                           # roda em http://localhost:3001
-```
-
-**Logins de teste (senha `123456`):**
-- Consumidor: `ana@markfruit.com`
-- Produtor 1: `joaquim@markfruit.com`
-- Produtor 2: `maria@markfruit.com`
-
-### 2. Frontend (em outro terminal)
-
-```powershell
+### 2. Configurar e rodar o frontend
+```bash
 cd frontend
 npm install
-npm run dev    # roda em http://localhost:5173
+# crie frontend/.env (veja .env.example) com VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY
+npm run dev
 ```
+Abra http://localhost:5173
 
-Abra `http://localhost:5173` no navegador.
+No VS Code também dá pra usar `Ctrl+Shift+B` ("Mark Fruit: Rodar site").
 
----
-
-## ⚠️ Dica para Windows / PowerShell
-
-Se o PowerShell bloquear o `npm` com erro de execution policy, abra um PowerShell como administrador e rode:
-
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-```
-
-Ou use `npm.cmd` no lugar de `npm`.
+### Logins de teste (senha: 123456)
+- Consumidores: `ana@markfruit.com` / `pedro@markfruit.com`
+- Produtores: `joaquim@markfruit.com`, `maria@markfruit.com`, etc.
 
 ---
 
-## 🔌 Endpoints principais da API
+## Deploy (Vercel)
 
-| Método | Rota                                   | Descrição                           |
-| ------ | -------------------------------------- | ----------------------------------- |
-| POST   | `/api/auth/register`                   | Cadastro (consumer ou producer)     |
-| POST   | `/api/auth/login`                      | Login                               |
-| GET    | `/api/users/me`                        | Perfil do usuário logado            |
-| PUT    | `/api/users/me`                        | Atualizar perfil                    |
-| GET    | `/api/posts`                           | Listar (suporta `?q=&category=&sort=best\|rating\|nearest&lat=&lon=`) |
-| POST   | `/api/posts`                           | Criar anúncio (produtor + multipart) |
-| GET    | `/api/posts/:id`                       | Detalhe do post + avaliações        |
-| POST   | `/api/posts/:id/ratings`               | Avaliar (1-5 estrelas + comentário) |
-| GET    | `/api/conversations`                   | Conversas do usuário                |
-| GET    | `/api/posts/:postId/messages/:otherId` | Histórico de mensagens              |
-| POST   | `/api/bot/ask`                         | Perguntar ao PlantaBot              |
-
-**Socket.io**: evento `chat:send { postId, receiverId, content }` envia mensagem em tempo real; clientes escutam `chat:message`.
-
----
-
-## 🌿 Como o bot funciona
-
-O `PlantaBot` é uma base de conhecimento local (`backend/src/routes/bot.js`) com guias para tomate, alface, cenoura, milho, maçã, morango, banana, pimentão e cebola.
-
-Ele detecta a planta na mensagem e o tópico (clima, solo, plantio, água, colheita, dicas) e responde de acordo. **Para plugar uma IA real** (Claude API, OpenAI, etc.), basta substituir a função no `router.post("/ask", ...)`.
-
----
-
-## 📦 Próximos passos sugeridos
-
-- [ ] Integrar pagamentos (Mercado Pago / Stripe)
-- [ ] Notificações push de novas mensagens
-- [ ] Sistema de favoritos
-- [ ] Recuperação de senha por email
-- [ ] Deploy (Vercel + Render/Railway)
-- [ ] Migrar SQLite → PostgreSQL em produção
-- [ ] Plugar Claude/GPT no bot
-
----
-
-🍅 Bom TCC!
+1. Importe o repositório na https://vercel.com
+2. **Root Directory:** `frontend`
+3. **Environment Variables:** `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY`
+4. Deploy. As imagens e o site são servidos pela Vercel; os dados vêm do Supabase.

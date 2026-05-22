@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { MessageCircle } from "lucide-react";
-import { api, resolveImage } from "../services/api.js";
+import { resolveImage } from "../services/supabase.js";
+import { listConversations } from "../services/db.js";
+import { useAuth } from "../context/AuthContext.jsx";
 
 function fmtTime(d) {
   const date = new Date(d);
@@ -13,15 +15,17 @@ function fmtTime(d) {
 }
 
 export default function Conversations() {
+  const { user } = useAuth();
   const [convs, setConvs] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get("/conversations").then((r) => {
-      setConvs(r.data);
-      setLoading(false);
-    });
-  }, []);
+    if (!user) return;
+    listConversations(user.id)
+      .then(setConvs)
+      .catch(() => setConvs([]))
+      .finally(() => setLoading(false));
+  }, [user]);
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">

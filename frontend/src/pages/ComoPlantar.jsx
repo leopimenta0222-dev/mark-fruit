@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Bot, Send, Sparkles, Sprout } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import { api } from "../services/api.js";
+import { listPosts } from "../services/db.js";
+import { askBot, getTopics } from "../data/plantBot.js";
 import PostCard from "../components/PostCard.jsx";
 
 export default function ComoPlantar() {
@@ -19,8 +20,8 @@ export default function ComoPlantar() {
   const listRef = useRef(null);
 
   useEffect(() => {
-    api.get("/posts", { params: { isSeed: true, sort: "rating" } }).then((r) => setSeeds(r.data));
-    api.get("/bot/topics").then((r) => setTopics(r.data));
+    listPosts({ isSeed: true, sort: "rating" }).then(setSeeds).catch(() => setSeeds([]));
+    setTopics(getTopics());
   }, []);
 
   useEffect(() => {
@@ -34,8 +35,10 @@ export default function ComoPlantar() {
     setMessages((m) => [...m, { role: "user", content: text }]);
     setThinking(true);
     try {
-      const { data } = await api.post("/bot/ask", { message: text });
-      setMessages((m) => [...m, { role: "bot", content: data.reply }]);
+      // pequeno delay só pra dar a sensação de "digitando"
+      await new Promise((r) => setTimeout(r, 350));
+      const { reply } = askBot(text);
+      setMessages((m) => [...m, { role: "bot", content: reply }]);
     } catch {
       setMessages((m) => [...m, { role: "bot", content: "Ops, deu um problema. Tenta de novo." }]);
     } finally {
