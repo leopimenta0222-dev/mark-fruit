@@ -106,10 +106,10 @@ export default function PostDetail() {
   const total = post.price * qty;
 
   return (
-    <div className="bg-stone-100 min-h-[calc(100vh-7rem)]">
+    <div className="bg-stone-100 dark:bg-stone-950 min-h-[calc(100vh-7rem)]">
       <div className="max-w-6xl mx-auto px-4 py-6">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-1 text-xs text-stone-500 mb-4">
+        <nav className="flex items-center gap-1 text-xs text-stone-500 dark:text-stone-400 mb-4">
           <Link to="/" className="hover:text-brand-700">Início</Link>
           <ChevronRight size={12}/>
           <Link to={`/?category=${post.category}`} className="hover:text-brand-700">{post.category}</Link>
@@ -118,10 +118,10 @@ export default function PostDetail() {
         </nav>
 
         {/* Bloco principal: imagem + info + caixa de compra */}
-        <div className="bg-white rounded-xl border border-stone-200 overflow-hidden">
+        <div className="bg-white dark:bg-stone-800 rounded-xl border border-stone-200 dark:border-stone-700 overflow-hidden">
           <div className="grid lg:grid-cols-12 gap-0">
             {/* Imagem */}
-            <div className="lg:col-span-5 p-5 flex items-start justify-center border-b lg:border-b-0 lg:border-r border-stone-100">
+            <div className="lg:col-span-5 p-5 flex items-start justify-center border-b lg:border-b-0 lg:border-r border-stone-100 dark:border-stone-700">
               <div className="relative w-full">
                 <img
                   src={resolveImage(post.image)}
@@ -141,11 +141,11 @@ export default function PostDetail() {
               <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-50 text-brand-700">
                 {post.category}
               </span>
-              <h1 className="mt-2 text-2xl font-bold text-stone-900 leading-snug">{post.title}</h1>
+              <h1 className="mt-2 text-2xl font-bold text-stone-900 dark:text-stone-100 leading-snug">{post.title}</h1>
 
               <div className="mt-2 flex items-center gap-2">
                 <Stars value={post.averageRating} size={15}/>
-                <span className="text-sm text-stone-500">
+                <span className="text-sm text-stone-500 dark:text-stone-400">
                   {post.averageRating ? post.averageRating.toFixed(1) : "Sem notas"}
                   {post.ratingCount > 0 && ` · ${post.ratingCount} avaliações`}
                 </span>
@@ -157,7 +157,7 @@ export default function PostDetail() {
                   <p className="text-sm text-stone-400 line-through">{fmtPrice(oldPrice)}</p>
                 )}
                 <div className="flex items-center gap-2">
-                  <span className="text-4xl font-light text-stone-900">{fmtPrice(post.price)}</span>
+                  <span className="text-4xl font-light text-stone-900 dark:text-stone-50">{fmtPrice(post.price)}</span>
                   {discountPct && (
                     <span className="text-sm font-bold text-brand-600">{discountPct}% OFF</span>
                   )}
@@ -173,53 +173,53 @@ export default function PostDetail() {
                 </p>
               )}
 
-              <div className="mt-5 pt-5 border-t border-stone-100">
-                <h3 className="font-bold text-stone-800 mb-2">Descrição</h3>
-                <p className="text-stone-600 text-sm whitespace-pre-wrap leading-relaxed">
+              <div className="mt-5 pt-5 border-t border-stone-100 dark:border-stone-700">
+                <h3 className="font-bold text-stone-800 dark:text-stone-100 mb-2">Descrição</h3>
+                <p className="text-stone-600 dark:text-stone-300 text-sm whitespace-pre-wrap leading-relaxed">
                   {post.description}
                 </p>
               </div>
             </div>
 
             {/* Caixa de compra */}
-            <div className="lg:col-span-3 p-5 lg:border-l border-stone-100 bg-stone-50/50">
+            <div className="lg:col-span-3 p-5 lg:border-l border-stone-100 dark:border-stone-700 bg-stone-50/50 dark:bg-stone-900/40">
               <div className="lg:sticky lg:top-28 space-y-4">
                 {/* Estoque */}
                 <div>
                   {post.stock > 0 ? (
-                    <p className="text-sm font-semibold text-stone-800">Estoque disponível</p>
+                    <p className="text-sm font-semibold text-stone-800 dark:text-stone-100">Estoque disponível</p>
                   ) : (
                     <p className="text-sm font-semibold text-red-600">Sem estoque</p>
                   )}
-                  <p className="text-xs text-stone-500">{post.stock} unidades</p>
+                  <p className="text-xs text-stone-500 dark:text-stone-400">{post.stock} unidades</p>
                 </div>
 
                 {/* Seletor de quantidade */}
                 <div>
-                  <label className="text-xs text-stone-500">Quantidade</label>
+                  <label className="text-xs text-stone-500 dark:text-stone-400">Quantidade</label>
                   <div className="mt-1 flex items-center gap-3">
-                    <div className="flex items-center border border-stone-300 rounded-lg overflow-hidden">
+                    <div className="flex items-center border border-stone-300 dark:border-stone-600 rounded-lg overflow-hidden">
                       <button
                         onClick={() => setQty((q) => Math.max(1, q - 1))}
-                        className="px-2.5 py-1.5 hover:bg-stone-100 text-stone-600"
+                        className="px-2.5 py-1.5 hover:bg-stone-100 dark:hover:bg-stone-700 text-stone-600 dark:text-stone-300"
                         disabled={qty <= 1}
                       >
                         <Minus size={14}/>
                       </button>
-                      <span className="px-3 py-1.5 text-sm font-semibold min-w-[2.5rem] text-center">
+                      <span className="px-3 py-1.5 text-sm font-semibold min-w-[2.5rem] text-center dark:text-stone-100">
                         {qty}
                       </span>
                       <button
                         onClick={() => setQty((q) => Math.min(post.stock, q + 1))}
-                        className="px-2.5 py-1.5 hover:bg-stone-100 text-stone-600"
+                        className="px-2.5 py-1.5 hover:bg-stone-100 dark:hover:bg-stone-700 text-stone-600 dark:text-stone-300"
                         disabled={qty >= post.stock}
                       >
                         <Plus size={14}/>
                       </button>
                     </div>
                     {qty > 1 && (
-                      <span className="text-sm text-stone-500">
-                        Total: <strong className="text-stone-800">{fmtPrice(total)}</strong>
+                      <span className="text-sm text-stone-500 dark:text-stone-400">
+                        Total: <strong className="text-stone-800 dark:text-stone-100">{fmtPrice(total)}</strong>
                       </span>
                     )}
                   </div>
@@ -253,7 +253,7 @@ export default function PostDetail() {
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    <p className="text-xs text-center text-stone-500 bg-stone-100 rounded-lg py-2">
+                    <p className="text-xs text-center text-stone-500 dark:text-stone-400 bg-stone-100 dark:bg-stone-900 rounded-lg py-2">
                       Este é o seu anúncio
                     </p>
                     <button onClick={handleDeletePost} className="btn-danger w-full !py-2.5">
@@ -271,9 +271,9 @@ export default function PostDetail() {
                 {/* Vendedor */}
                 <Link
                   to={`/produtor/${post.author.id}`}
-                  className="block pt-4 border-t border-stone-200"
+                  className="block pt-4 border-t border-stone-200 dark:border-stone-700"
                 >
-                  <p className="text-xs text-stone-500 mb-1.5 flex items-center gap-1">
+                  <p className="text-xs text-stone-500 dark:text-stone-400 mb-1.5 flex items-center gap-1">
                     <Store size={12}/> Vendido por
                   </p>
                   <div className="flex items-center gap-2.5">
@@ -281,11 +281,11 @@ export default function PostDetail() {
                       {post.author.name?.[0]?.toUpperCase()}
                     </div>
                     <div className="min-w-0">
-                      <p className="font-semibold text-sm truncate hover:text-brand-700">
+                      <p className="font-semibold text-sm truncate hover:text-brand-700 dark:text-stone-100">
                         {post.author.name}
                       </p>
                       {(post.author.city || post.author.state) && (
-                        <p className="text-xs text-stone-500 flex items-center gap-1">
+                        <p className="text-xs text-stone-500 dark:text-stone-400 flex items-center gap-1">
                           <MapPin size={11}/>
                           {[post.author.city, post.author.state].filter(Boolean).join(" - ")}
                         </p>
@@ -295,7 +295,7 @@ export default function PostDetail() {
                 </Link>
 
                 {/* Selos de confiança */}
-                <div className="pt-4 border-t border-stone-200 space-y-2 text-xs text-stone-600">
+                <div className="pt-4 border-t border-stone-200 dark:border-stone-700 space-y-2 text-xs text-stone-600 dark:text-stone-300">
                   <p className="flex items-center gap-2">
                     <ShieldCheck size={15} className="text-brand-600 shrink-0"/>
                     Compra protegida — receba o produto ou seu dinheiro de volta
@@ -315,27 +315,27 @@ export default function PostDetail() {
         </div>
 
         {/* Avaliações */}
-        <section className="mt-6 bg-white rounded-xl border border-stone-200 p-5 md:p-6">
-          <h2 className="text-xl font-bold mb-4">
+        <section className="mt-6 bg-white dark:bg-stone-800 rounded-xl border border-stone-200 dark:border-stone-700 p-5 md:p-6">
+          <h2 className="text-xl font-bold mb-4 dark:text-stone-100">
             Avaliações {post.ratingCount > 0 && <span className="text-stone-400">({post.ratingCount})</span>}
           </h2>
 
           {/* Resumo da nota */}
           {post.ratingCount > 0 && (
-            <div className="flex items-center gap-4 mb-5 pb-5 border-b border-stone-100">
+            <div className="flex items-center gap-4 mb-5 pb-5 border-b border-stone-100 dark:border-stone-700">
               <div className="text-center">
-                <div className="text-4xl font-bold text-stone-800">
+                <div className="text-4xl font-bold text-stone-800 dark:text-stone-100">
                   {post.averageRating.toFixed(1)}
                 </div>
                 <Stars value={post.averageRating} size={14}/>
-                <p className="text-xs text-stone-500 mt-1">{post.ratingCount} avaliações</p>
+                <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">{post.ratingCount} avaliações</p>
               </div>
             </div>
           )}
 
           {!isOwner && user && (
-            <form onSubmit={submitRating} className="bg-stone-50 rounded-xl p-4 mb-5 border border-stone-100">
-              <p className="font-semibold mb-2">
+            <form onSubmit={submitRating} className="bg-stone-50 dark:bg-stone-900/50 rounded-xl p-4 mb-5 border border-stone-100 dark:border-stone-700">
+              <p className="font-semibold mb-2 dark:text-stone-100">
                 {myRating ? "Sua avaliação" : "Avaliar este produto"}
               </p>
               <Stars value={stars} interactive onChange={setStars} size={28}/>
@@ -359,31 +359,31 @@ export default function PostDetail() {
           )}
 
           {!user && !isOwner && (
-            <div className="bg-stone-50 rounded-xl p-5 mb-5 text-center border border-stone-100">
-              <p className="text-stone-600 mb-2">Entre para deixar sua avaliação.</p>
+            <div className="bg-stone-50 dark:bg-stone-900/50 rounded-xl p-5 mb-5 text-center border border-stone-100 dark:border-stone-700">
+              <p className="text-stone-600 dark:text-stone-300 mb-2">Entre para deixar sua avaliação.</p>
               <Link to="/login" className="btn-primary">Entrar</Link>
             </div>
           )}
 
           <div className="space-y-3">
             {post.ratings.length === 0 && (
-              <p className="text-stone-500 text-center py-6">
+              <p className="text-stone-500 dark:text-stone-400 text-center py-6">
                 Ainda não há avaliações. Seja o primeiro!
               </p>
             )}
             {post.ratings.map((r) => (
-              <div key={r.id} className="border border-stone-100 rounded-xl p-4">
+              <div key={r.id} className="border border-stone-100 dark:border-stone-700 rounded-xl p-4">
                 <div className="flex items-center gap-3 mb-1">
-                  <div className="w-9 h-9 rounded-full bg-stone-100 text-stone-700 grid place-items-center font-bold">
+                  <div className="w-9 h-9 rounded-full bg-stone-100 dark:bg-stone-700 text-stone-700 dark:text-stone-200 grid place-items-center font-bold">
                     {r.user.name?.[0]?.toUpperCase()}
                   </div>
                   <div>
-                    <p className="font-semibold text-sm">{r.user.name}</p>
+                    <p className="font-semibold text-sm dark:text-stone-100">{r.user.name}</p>
                     <Stars value={r.stars} size={12}/>
                   </div>
                   <span className="ml-auto text-xs text-stone-400">{fmtDate(r.createdAt)}</span>
                 </div>
-                {r.comment && <p className="text-stone-700 ml-12 text-sm">{r.comment}</p>}
+                {r.comment && <p className="text-stone-700 dark:text-stone-300 ml-12 text-sm">{r.comment}</p>}
               </div>
             ))}
           </div>

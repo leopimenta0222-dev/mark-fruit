@@ -29,7 +29,7 @@ export default function App() {
           <Route path="*" element={<div className="p-8 text-center">Página não encontrada</div>} />
         </Routes>
       </main>
-      <footer className="border-t border-stone-100 bg-white py-6 text-center text-sm text-stone-500">
+      <footer className="border-t border-stone-100 bg-white dark:bg-stone-900 dark:border-stone-800 py-6 text-center text-sm text-stone-500 dark:text-stone-400">
         Mark Fruit — TCC por Maria, Maria, Luiza e Yago
       </footer>
     </div>

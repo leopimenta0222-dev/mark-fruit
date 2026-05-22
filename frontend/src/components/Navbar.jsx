@@ -2,9 +2,10 @@ import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   Sprout, Search, User, LogOut, MessageCircle, Plus, BookOpen,
-  MapPin, Apple, Salad, Flower2, Sprout as SeedIcon, ChevronDown
+  MapPin, Apple, Salad, Flower2, Sprout as SeedIcon, ChevronDown, Sun, Moon
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext.jsx";
+import { useTheme } from "../context/ThemeContext.jsx";
 
 const CATEGORIES = [
   { name: "Frutas", icon: Apple, slug: "Frutas" },
@@ -15,6 +16,7 @@ const CATEGORIES = [
 
 export default function Navbar() {
   const { user, logout } = useAuth();
+  const { dark, toggle } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const [q, setQ] = useState("");
@@ -61,6 +63,15 @@ export default function Navbar() {
             </div>
           </form>
 
+          {/* Botão tema */}
+          <button
+            onClick={toggle}
+            title={dark ? "Modo claro" : "Modo noturno"}
+            className="shrink-0 w-9 h-9 grid place-items-center rounded-lg hover:bg-brand-700 text-white"
+          >
+            {dark ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+
           {/* Right area */}
           <div className="hidden md:flex items-center gap-1 shrink-0">
             {user ? (
@@ -80,19 +91,19 @@ export default function Navbar() {
                     </div>
                     <ChevronDown size={14}/>
                   </button>
-                  <div className="absolute right-0 top-full mt-1 w-56 bg-white text-stone-700 rounded-xl shadow-xl border border-stone-100 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition py-2">
-                    <div className="px-4 py-2 border-b border-stone-100">
+                  <div className="absolute right-0 top-full mt-1 w-56 bg-white text-stone-700 rounded-xl shadow-xl border border-stone-100 dark:bg-stone-800 dark:text-stone-200 dark:border-stone-700 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition py-2">
+                    <div className="px-4 py-2 border-b border-stone-100 dark:border-stone-700">
                       <p className="font-semibold text-sm">{user.name}</p>
-                      <p className="text-xs text-stone-500">
+                      <p className="text-xs text-stone-500 dark:text-stone-400">
                         {user.role === "PRODUCER" ? "Produtor" : "Consumidor"}
                       </p>
                     </div>
-                    <Link to="/perfil" className="flex items-center gap-2 px-4 py-2 hover:bg-stone-50 text-sm">
+                    <Link to="/perfil" className="flex items-center gap-2 px-4 py-2 hover:bg-stone-50 dark:hover:bg-stone-700 text-sm">
                       <User size={14}/> Meu perfil
                     </Link>
                     <button
                       onClick={() => { logout(); navigate("/login"); }}
-                      className="w-full flex items-center gap-2 px-4 py-2 hover:bg-stone-50 text-sm text-red-600"
+                      className="w-full flex items-center gap-2 px-4 py-2 hover:bg-stone-50 dark:hover:bg-stone-700 text-sm text-red-600"
                     >
                       <LogOut size={14}/> Sair
                     </button>
@@ -114,9 +125,9 @@ export default function Navbar() {
       </div>
 
       {/* Linha 2: categorias */}
-      <div className="bg-white border-b border-stone-200">
+      <div className="bg-white border-b border-stone-200 dark:bg-stone-900 dark:border-stone-700">
         <div className="max-w-7xl mx-auto px-4 h-11 flex items-center gap-1 overflow-x-auto">
-          <Link to="/" className="px-3 py-1.5 rounded-md text-sm font-medium text-stone-700 hover:bg-stone-100 flex items-center gap-1.5 whitespace-nowrap">
+          <Link to="/" className="px-3 py-1.5 rounded-md text-sm font-medium text-stone-700 hover:bg-stone-100 dark:text-stone-300 dark:hover:bg-stone-800 flex items-center gap-1.5 whitespace-nowrap">
             <MapPin size={14} className="text-brand-600"/> Início
           </Link>
           {CATEGORIES.map((c) => {
@@ -125,13 +136,13 @@ export default function Navbar() {
               <Link
                 key={c.slug}
                 to={`/?category=${c.slug}`}
-                className="px-3 py-1.5 rounded-md text-sm font-medium text-stone-700 hover:bg-stone-100 flex items-center gap-1.5 whitespace-nowrap"
+                className="px-3 py-1.5 rounded-md text-sm font-medium text-stone-700 hover:bg-stone-100 dark:text-stone-300 dark:hover:bg-stone-800 flex items-center gap-1.5 whitespace-nowrap"
               >
                 <Icon size={14} className="text-brand-600"/> {c.name}
               </Link>
             );
           })}
-          <Link to="/como-plantar" className="px-3 py-1.5 rounded-md text-sm font-medium text-stone-700 hover:bg-stone-100 flex items-center gap-1.5 whitespace-nowrap">
+          <Link to="/como-plantar" className="px-3 py-1.5 rounded-md text-sm font-medium text-stone-700 hover:bg-stone-100 dark:text-stone-300 dark:hover:bg-stone-800 flex items-center gap-1.5 whitespace-nowrap">
             <BookOpen size={14} className="text-brand-600"/> Como Plantar
           </Link>
         </div>

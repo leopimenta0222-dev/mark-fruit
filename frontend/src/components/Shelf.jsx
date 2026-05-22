@@ -16,13 +16,13 @@ export default function Shelf({ title, subtitle, icon, posts, viewAllHref, accen
   if (!posts?.length) return null;
 
   return (
-    <section className="bg-white rounded-xl shadow-sm border border-stone-100 overflow-hidden">
-      <div className="px-5 py-4 flex items-center justify-between border-b border-stone-100">
+    <section className="bg-white dark:bg-stone-800 rounded-xl shadow-sm border border-stone-100 dark:border-stone-700 overflow-hidden">
+      <div className="px-5 py-4 flex items-center justify-between border-b border-stone-100 dark:border-stone-700">
         <div>
-          <h2 className="text-xl font-bold text-stone-800 flex items-center gap-2">
+          <h2 className="text-xl font-bold text-stone-800 dark:text-stone-100 flex items-center gap-2">
             {icon} {title}
           </h2>
-          {subtitle && <p className="text-sm text-stone-500 mt-0.5">{subtitle}</p>}
+          {subtitle && <p className="text-sm text-stone-500 dark:text-stone-400 mt-0.5">{subtitle}</p>}
         </div>
         {viewAllHref && (
           <Link to={viewAllHref} className="hidden md:flex items-center gap-1 text-sm font-semibold text-brand-700 hover:text-brand-800">
@@ -42,13 +42,13 @@ export default function Shelf({ title, subtitle, icon, posts, viewAllHref, accen
 
         <button
           onClick={() => scroll(-1)}
-          className="hidden md:grid place-items-center absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-lg border border-stone-200 opacity-0 group-hover/shelf:opacity-100 transition hover:bg-brand-50"
+          className="hidden md:grid place-items-center absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white dark:bg-stone-700 dark:text-stone-100 shadow-lg border border-stone-200 dark:border-stone-600 opacity-0 group-hover/shelf:opacity-100 transition hover:bg-brand-50 dark:hover:bg-stone-600"
         >
           <ChevronLeft size={20}/>
         </button>
         <button
           onClick={() => scroll(1)}
-          className="hidden md:grid place-items-center absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white shadow-lg border border-stone-200 opacity-0 group-hover/shelf:opacity-100 transition hover:bg-brand-50"
+          className="hidden md:grid place-items-center absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white dark:bg-stone-700 dark:text-stone-100 shadow-lg border border-stone-200 dark:border-stone-600 opacity-0 group-hover/shelf:opacity-100 transition hover:bg-brand-50 dark:hover:bg-stone-600"
         >
           <ChevronRight size={20}/>
         </button>

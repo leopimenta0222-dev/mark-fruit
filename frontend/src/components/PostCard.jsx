@@ -20,9 +20,9 @@ export default function PostCard({ post, compact = false }) {
   return (
     <Link
       to={`/post/${post.id}`}
-      className="group bg-white rounded-lg border border-stone-200 hover:shadow-lg hover:border-brand-300 transition flex flex-col overflow-hidden"
+      className="group bg-white dark:bg-stone-800 rounded-lg border border-stone-200 dark:border-stone-700 hover:shadow-lg hover:border-brand-300 transition flex flex-col overflow-hidden"
     >
-      <div className="relative aspect-square bg-stone-50 overflow-hidden">
+      <div className="relative aspect-square bg-stone-50 dark:bg-stone-900 overflow-hidden">
         <img
           src={img}
           alt={post.title}
@@ -42,7 +42,7 @@ export default function PostCard({ post, compact = false }) {
       </div>
 
       <div className="p-3 flex flex-col flex-1">
-        <h3 className="text-sm text-stone-800 line-clamp-2 leading-snug min-h-[2.5rem]">
+        <h3 className="text-sm text-stone-800 dark:text-stone-100 line-clamp-2 leading-snug min-h-[2.5rem]">
           {post.title}
         </h3>
 
@@ -55,7 +55,7 @@ export default function PostCard({ post, compact = false }) {
         </div>
 
         <div className="flex items-baseline gap-2">
-          <span className="text-2xl font-light text-stone-900 leading-none">
+          <span className="text-2xl font-light text-stone-900 dark:text-stone-50 leading-none">
             {fmtPrice(post.price)}
           </span>
         </div>
@@ -78,7 +78,7 @@ export default function PostCard({ post, compact = false }) {
         </div>
 
         {!compact && (
-          <div className="mt-2 pt-2 border-t border-stone-100 flex items-center justify-between text-[11px] text-stone-500">
+          <div className="mt-2 pt-2 border-t border-stone-100 dark:border-stone-700 flex items-center justify-between text-[11px] text-stone-500 dark:text-stone-400">
             <span className="truncate max-w-[60%]">{post.author?.name}</span>
             {post.distanceKm != null && (
               <span className="flex items-center gap-0.5 shrink-0">

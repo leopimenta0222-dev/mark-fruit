@@ -78,7 +78,7 @@ export default function Home() {
   const isFiltering = q || filterCategory;
 
   return (
-    <div className="bg-stone-100 min-h-[calc(100vh-7rem)]">
+    <div className="bg-stone-100 dark:bg-stone-950 min-h-[calc(100vh-7rem)]">
       {/* Hero / Banner */}
       {!isFiltering && (
         <section className="bg-gradient-to-r from-brand-600 via-brand-500 to-emerald-500 text-white">
@@ -108,18 +108,18 @@ export default function Home() {
 
       {/* Selos */}
       {!isFiltering && (
-        <div className="bg-white border-b border-stone-200">
+        <div className="bg-white border-b border-stone-200 dark:bg-stone-900 dark:border-stone-700">
           <div className="max-w-7xl mx-auto px-4 py-3 grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-            <div className="flex items-center gap-2 text-stone-700">
+            <div className="flex items-center gap-2 text-stone-700 dark:text-stone-300">
               <Truck size={18} className="text-brand-600"/> Frete grátis acima de R$ 30
             </div>
-            <div className="flex items-center gap-2 text-stone-700">
+            <div className="flex items-center gap-2 text-stone-700 dark:text-stone-300">
               <ShieldCheck size={18} className="text-brand-600"/> Compra protegida
             </div>
-            <div className="flex items-center gap-2 text-stone-700">
+            <div className="flex items-center gap-2 text-stone-700 dark:text-stone-300">
               <Star size={18} className="text-amber-500"/> Produtores avaliados
             </div>
-            <div className="flex items-center gap-2 text-stone-700">
+            <div className="flex items-center gap-2 text-stone-700 dark:text-stone-300">
               <MapPin size={18} className="text-brand-600"/> Perto de você
             </div>
           </div>
@@ -136,12 +136,12 @@ export default function Home() {
                 <Link
                   key={c.name}
                   to={`/?category=${c.name}`}
-                  className="bg-white rounded-xl p-4 hover:shadow-md transition border border-stone-100 flex flex-col items-center gap-2 group"
+                  className="bg-white dark:bg-stone-800 rounded-xl p-4 hover:shadow-md transition border border-stone-100 dark:border-stone-700 flex flex-col items-center gap-2 group"
                 >
                   <div className={`w-14 h-14 rounded-2xl grid place-items-center ${c.color} group-hover:scale-110 transition`}>
                     <Icon size={26}/>
                   </div>
-                  <span className="text-sm font-semibold text-stone-700">{c.name}</span>
+                  <span className="text-sm font-semibold text-stone-700 dark:text-stone-200">{c.name}</span>
                 </Link>
               );
             })}
@@ -150,13 +150,13 @@ export default function Home() {
 
         {/* Resultado filtrado */}
         {isFiltering && (
-          <section className="bg-white rounded-xl border border-stone-100 p-5">
+          <section className="bg-white dark:bg-stone-800 rounded-xl border border-stone-100 dark:border-stone-700 p-5">
             <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
               <div>
-                <h1 className="text-2xl font-bold">
+                <h1 className="text-2xl font-bold dark:text-stone-100">
                   {q ? `Resultados para "${q}"` : `Categoria: ${filterCategory}`}
                 </h1>
-                <p className="text-sm text-stone-500 mt-0.5">
+                <p className="text-sm text-stone-500 dark:text-stone-400 mt-0.5">
                   {allPosts.length} {allPosts.length === 1 ? "produto encontrado" : "produtos encontrados"}
                 </p>
               </div>
@@ -171,7 +171,7 @@ export default function Home() {
             {loading ? (
               <SkeletonGrid/>
             ) : allPosts.length === 0 ? (
-              <div className="text-center py-12 text-stone-500">
+              <div className="text-center py-12 text-stone-500 dark:text-stone-400">
                 <p className="text-lg">Nada encontrado por aqui</p>
                 <p className="text-sm mt-1">Tente outra busca ou categoria.</p>
               </div>

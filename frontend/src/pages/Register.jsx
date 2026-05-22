@@ -50,23 +50,23 @@ export default function Register() {
             type="button"
             onClick={() => setRole("CONSUMER")}
             className={`p-4 rounded-xl border-2 transition text-left ${
-              role === "CONSUMER" ? "border-brand-500 bg-brand-50" : "border-stone-200 hover:border-stone-300"
+              role === "CONSUMER" ? "border-brand-500 bg-brand-50 dark:bg-brand-900/30" : "border-stone-200 dark:border-stone-700 hover:border-stone-300"
             }`}
           >
             <ShoppingBasket className="mb-2 text-brand-600" />
-            <div className="font-bold">Consumidor</div>
-            <div className="text-xs text-stone-500">Quero comprar</div>
+            <div className="font-bold dark:text-stone-100">Consumidor</div>
+            <div className="text-xs text-stone-500 dark:text-stone-400">Quero comprar</div>
           </button>
           <button
             type="button"
             onClick={() => setRole("PRODUCER")}
             className={`p-4 rounded-xl border-2 transition text-left ${
-              role === "PRODUCER" ? "border-brand-500 bg-brand-50" : "border-stone-200 hover:border-stone-300"
+              role === "PRODUCER" ? "border-brand-500 bg-brand-50 dark:bg-brand-900/30" : "border-stone-200 dark:border-stone-700 hover:border-stone-300"
             }`}
           >
             <Tractor className="mb-2 text-brand-600" />
-            <div className="font-bold">Produtor</div>
-            <div className="text-xs text-stone-500">Quero vender</div>
+            <div className="font-bold dark:text-stone-100">Produtor</div>
+            <div className="text-xs text-stone-500 dark:text-stone-400">Quero vender</div>
           </button>
         </div>
 

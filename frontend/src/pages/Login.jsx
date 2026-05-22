@@ -80,7 +80,7 @@ export default function Login() {
           </Link>
         </p>
 
-        <div className="mt-6 p-3 bg-stone-50 rounded-lg text-xs text-stone-600 space-y-1">
+        <div className="mt-6 p-3 bg-stone-50 dark:bg-stone-900 rounded-lg text-xs text-stone-600 dark:text-stone-300 space-y-1">
           <p className="font-semibold">Logins de teste (senha: 123456):</p>
           <p>• Consumidor: ana@markfruit.com</p>
           <p>• Produtor: joaquim@markfruit.com</p>

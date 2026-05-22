@@ -55,20 +55,20 @@ export default function Chat() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-6">
       <div className="card flex flex-col h-[70vh]">
-        <div className="p-4 border-b border-stone-100 flex items-center gap-3">
-          <Link to="/chats" className="text-stone-500 hover:text-stone-700">
+        <div className="p-4 border-b border-stone-100 dark:border-stone-700 flex items-center gap-3">
+          <Link to="/chats" className="text-stone-500 dark:text-stone-400 hover:text-stone-700">
             <ArrowLeft/>
           </Link>
           <Link to={`/post/${post.id}`} className="flex items-center gap-3 flex-1">
             <img src={resolveImage(post.image)} alt="" className="w-12 h-12 rounded-xl object-cover"/>
             <div>
-              <p className="font-semibold">{otherUser.name}</p>
-              <p className="text-xs text-stone-500">Sobre: {post.title}</p>
+              <p className="font-semibold dark:text-stone-100">{otherUser.name}</p>
+              <p className="text-xs text-stone-500 dark:text-stone-400">Sobre: {post.title}</p>
             </div>
           </Link>
         </div>
 
-        <div ref={listRef} className="flex-1 overflow-y-auto p-4 space-y-2 bg-stone-50">
+        <div ref={listRef} className="flex-1 overflow-y-auto p-4 space-y-2 bg-stone-50 dark:bg-stone-900/50">
           {messages.length === 0 && (
             <p className="text-center text-stone-400 text-sm py-8">
               Comece a conversa enviando uma mensagem.
@@ -80,7 +80,7 @@ export default function Chat() {
               <div key={m.id} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
                 <div
                   className={`max-w-[75%] px-3.5 py-2 rounded-2xl ${
-                    mine ? "bg-brand-600 text-white rounded-br-sm" : "bg-white border border-stone-200 rounded-bl-sm"
+                    mine ? "bg-brand-600 text-white rounded-br-sm" : "bg-white dark:bg-stone-800 dark:text-stone-100 border border-stone-200 dark:border-stone-700 rounded-bl-sm"
                   }`}
                 >
                   <p className="whitespace-pre-wrap break-words">{m.content}</p>
@@ -93,7 +93,7 @@ export default function Chat() {
           })}
         </div>
 
-        <form onSubmit={send} className="p-3 border-t border-stone-100 flex gap-2">
+        <form onSubmit={send} className="p-3 border-t border-stone-100 dark:border-stone-700 flex gap-2">
           <input
             className="input"
             placeholder="Digite uma mensagem..."

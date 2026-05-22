@@ -52,8 +52,8 @@ export default function ComoPlantar() {
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-100 text-brand-700 text-sm font-semibold mb-3">
           <Sparkles size={14}/> Aprenda a cultivar
         </div>
-        <h1 className="text-3xl md:text-4xl font-extrabold">Como plantar</h1>
-        <p className="text-stone-600 mt-2">
+        <h1 className="text-3xl md:text-4xl font-extrabold dark:text-stone-100">Como plantar</h1>
+        <p className="text-stone-600 dark:text-stone-300 mt-2">
           Tire suas dúvidas com o PlantaBot e compre sementes direto dos nossos produtores.
         </p>
       </div>
@@ -62,26 +62,26 @@ export default function ComoPlantar() {
         {/* Bot */}
         <div className="lg:col-span-2">
           <div className="card flex flex-col h-[600px]">
-            <div className="p-4 border-b border-stone-100 flex items-center gap-3">
+            <div className="p-4 border-b border-stone-100 dark:border-stone-700 flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-brand-600 text-white grid place-items-center">
                 <Bot size={22}/>
               </div>
               <div>
-                <p className="font-bold">PlantaBot</p>
+                <p className="font-bold dark:text-stone-100">PlantaBot</p>
                 <p className="text-xs text-brand-600 flex items-center gap-1">
                   <span className="w-2 h-2 bg-brand-500 rounded-full animate-pulse"/> online
                 </p>
               </div>
             </div>
 
-            <div ref={listRef} className="flex-1 overflow-y-auto p-4 space-y-3 bg-stone-50">
+            <div ref={listRef} className="flex-1 overflow-y-auto p-4 space-y-3 bg-stone-50 dark:bg-stone-900/50">
               {messages.map((m, i) => (
                 <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                   <div
                     className={`max-w-[80%] px-4 py-2.5 rounded-2xl ${
                       m.role === "user"
                         ? "bg-brand-600 text-white rounded-br-sm"
-                        : "bg-white border border-stone-200 rounded-bl-sm"
+                        : "bg-white dark:bg-stone-800 dark:text-stone-100 border border-stone-200 dark:border-stone-700 rounded-bl-sm"
                     }`}
                   >
                     <div className={`prose prose-sm max-w-none ${m.role === "user" ? "prose-invert" : ""}`}>
@@ -92,7 +92,7 @@ export default function ComoPlantar() {
               ))}
               {thinking && (
                 <div className="flex justify-start">
-                  <div className="bg-white border border-stone-200 px-4 py-3 rounded-2xl flex gap-1">
+                  <div className="bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 px-4 py-3 rounded-2xl flex gap-1">
                     <span className="w-2 h-2 bg-stone-400 rounded-full animate-bounce"/>
                     <span className="w-2 h-2 bg-stone-400 rounded-full animate-bounce [animation-delay:.1s]"/>
                     <span className="w-2 h-2 bg-stone-400 rounded-full animate-bounce [animation-delay:.2s]"/>
@@ -102,12 +102,12 @@ export default function ComoPlantar() {
             </div>
 
             {topics.length > 0 && messages.length < 3 && (
-              <div className="p-3 border-t border-stone-100 flex gap-2 flex-wrap">
+              <div className="p-3 border-t border-stone-100 dark:border-stone-700 flex gap-2 flex-wrap">
                 {topics.slice(0, 6).map((t) => (
                   <button
                     key={t.key}
                     onClick={() => ask(`Como plantar ${t.name.toLowerCase()}?`)}
-                    className="text-xs px-3 py-1.5 rounded-full bg-stone-100 hover:bg-brand-100 hover:text-brand-700 transition"
+                    className="text-xs px-3 py-1.5 rounded-full bg-stone-100 dark:bg-stone-700 dark:text-stone-200 hover:bg-brand-100 hover:text-brand-700 transition"
                   >
                     {t.name}
                   </button>
@@ -115,7 +115,7 @@ export default function ComoPlantar() {
               </div>
             )}
 
-            <form onSubmit={(e) => { e.preventDefault(); ask(); }} className="p-3 border-t border-stone-100 flex gap-2">
+            <form onSubmit={(e) => { e.preventDefault(); ask(); }} className="p-3 border-t border-stone-100 dark:border-stone-700 flex gap-2">
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
@@ -133,7 +133,7 @@ export default function ComoPlantar() {
         <aside>
           <div className="flex items-center gap-2 mb-4">
             <Sprout className="text-brand-600"/>
-            <h2 className="text-xl font-bold">Sementes à venda</h2>
+            <h2 className="text-xl font-bold dark:text-stone-100">Sementes à venda</h2>
           </div>
           <div className="grid grid-cols-2 gap-3">
             {seeds.length === 0 && (

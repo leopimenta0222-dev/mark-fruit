@@ -82,7 +82,7 @@ export default function NewPost() {
           <label className="label">Foto do produto</label>
           <label className="block cursor-pointer">
             <input type="file" accept="image/*" onChange={onFile} className="hidden"/>
-            <div className="border-2 border-dashed border-stone-300 rounded-2xl p-8 text-center hover:border-brand-400 transition">
+            <div className="border-2 border-dashed border-stone-300 dark:border-stone-600 rounded-2xl p-8 text-center hover:border-brand-400 transition">
               {preview ? (
                 <img src={preview} alt="" className="mx-auto max-h-64 rounded-xl"/>
               ) : (
