@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Mark Fruit — Diagrama de Classes</title>
+  <style>
+    body { margin: 0; padding: 20px; background: #ffffff; font-family: 'Segoe UI', Roboto, Arial, sans-serif; }
+    svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+    .hint { text-align: center; color: #78716c; font-size: 12px; margin-top: 12px; }
+  </style>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1010" font-family="'Segoe UI', Roboto, Arial, sans-serif">
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="700" y="42" text-anchor="middle" font-size="24" font-weight="700" fill="#166534">Sistema Mark Fruit — Diagrama de Classes</text>
+  <text x="700" y="66" text-anchor="middle" font-size="13" fill="#57534e" font-style="italic">Diagrama UML — estrutura orientada a objetos</text>
+
+  <g fill="none" stroke="#44403c" stroke-width="1.5">
+    <polyline points="280,560 280,535 695,535 695,510"/>
+    <polyline points="1120,560 1120,530 725,530 725,510"/>
+    <line x1="970" y1="640" x2="850" y2="640"/>
+    <line x1="280" y1="745" x2="280" y2="790"/>
+    <line x1="560" y1="860" x2="430" y2="860"/>
+    <line x1="850" y1="860" x2="970" y2="860"/>
+  </g>
+  <polygon points="695,495 686,510 704,510" fill="white" stroke="#44403c" stroke-width="1.5"/>
+  <polygon points="725,495 716,510 734,510" fill="white" stroke="#44403c" stroke-width="1.5"/>
+
+  <g font-size="11" fill="#57534e" font-style="italic">
+    <text x="958" y="635">1</text>
+    <text x="858" y="635">0..*</text>
+    <text x="284" y="765">1</text>
+    <text x="284" y="785">0..*</text>
+    <text x="548" y="855">1</text>
+    <text x="438" y="855">0..*</text>
+    <text x="858" y="855">1</text>
+    <text x="960" y="855">0..*</text>
+  </g>
+
+  <!-- Usuario -->
+  <rect x="560" y="110" width="280" height="400" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.5" rx="3"/>
+  <text x="700" y="138" text-anchor="middle" font-size="11" fill="#713f12" font-style="italic">&lt;&lt;abstract&gt;&gt;</text>
+  <text x="700" y="160" text-anchor="middle" font-size="16" font-weight="700" font-style="italic" fill="#713f12">Usuario</text>
+  <line x1="560" y1="175" x2="840" y2="175" stroke="#ca8a04"/>
+  <g font-size="12" fill="#1c1917">
+    <text x="572" y="197">- id: UUID</text>
+    <text x="572" y="216">- nome: String</text>
+    <text x="572" y="235">- email: String</text>
+    <text x="572" y="254">- senha: String</text>
+    <text x="572" y="273">- telefone: String</text>
+    <text x="572" y="292">- cidade: String</text>
+    <text x="572" y="311">- estado: String</text>
+    <text x="572" y="330">- bio: String</text>
+    <text x="572" y="349">- latitude: Float</text>
+    <text x="572" y="368">- longitude: Float</text>
+  </g>
+  <line x1="560" y1="383" x2="840" y2="383" stroke="#ca8a04"/>
+  <g font-size="12" fill="#1c1917">
+    <text x="572" y="405">+ cadastrar()</text>
+    <text x="572" y="424">+ login(email, senha): Token</text>
+    <text x="572" y="443">+ logout()</text>
+    <text x="572" y="462">+ editarPerfil(dados)</text>
+    <text x="572" y="481">+ atualizarLocalizacao(lat, lon)</text>
+  </g>
+
+  <!-- Bot -->
+  <rect x="1080" y="110" width="240" height="150" fill="#f5f5f4" stroke="#78716c" stroke-width="1.5" rx="3"/>
+  <text x="1200" y="138" text-anchor="middle" font-size="16" font-weight="700" fill="#44403c">Bot</text>
+  <line x1="1080" y1="153" x2="1320" y2="153" stroke="#78716c"/>
+  <g font-size="12" fill="#1c1917">
+    <text x="1092" y="175">- plantas: String[]</text>
+  </g>
+  <line x1="1080" y1="190" x2="1320" y2="190" stroke="#78716c"/>
+  <g font-size="12" fill="#1c1917">
+    <text x="1092" y="212">+ responder(pergunta): String</text>
+    <text x="1092" y="231">+ listarTopicos(): String[]</text>
+  </g>
+
+  <!-- Consumidor -->
+  <rect x="130" y="560" width="300" height="185" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5" rx="3"/>
+  <text x="280" y="588" text-anchor="middle" font-size="16" font-weight="700" fill="#1e3a8a">Consumidor</text>
+  <line x1="130" y1="603" x2="430" y2="603" stroke="#2563eb"/>
+  <g font-size="12" fill="#1c1917">
+    <text x="142" y="625">+ avaliarProduto(anuncio, estrelas, com)</text>
+    <text x="142" y="644">+ removerAvaliacao(anuncio)</text>
+    <text x="142" y="663">+ iniciarChat(produtor, anuncio)</text>
+    <text x="142" y="682">+ enviarMensagem(destinatario, conteudo)</text>
+    <text x="142" y="701">+ buscarProdutos(termo, categoria)</text>
+    <text x="142" y="720">+ consultarBot(pergunta)</text>
+  </g>
+
+  <!-- Produtor -->
+  <rect x="970" y="560" width="300" height="170" fill="#fce7f3" stroke="#db2777" stroke-width="1.5" rx="3"/>
+  <text x="1120" y="588" text-anchor="middle" font-size="16" font-weight="700" fill="#831843">Produtor</text>
+  <line x1="970" y1="603" x2="1270" y2="603" stroke="#db2777"/>
+  <g font-size="12" fill="#1c1917">
+    <text x="982" y="625">+ criarAnuncio(titulo, desc, preco, img)</text>
+    <text x="982" y="644">+ editarAnuncio(id, dados)</text>
+    <text x="982" y="663">+ excluirAnuncio(id)</text>
+    <text x="982" y="682">+ listarMeusAnuncios()</text>
+    <text x="982" y="701">+ responderMensagem(dest, conteudo)</text>
+  </g>
+
+  <!-- Anuncio -->
+  <rect x="560" y="560" width="290" height="345" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5" rx="3"/>
+  <text x="705" y="588" text-anchor="middle" font-size="16" font-weight="700" fill="#14532d">Anuncio</text>
+  <line x1="560" y1="603" x2="850" y2="603" stroke="#16a34a"/>
+  <g font-size="12" fill="#1c1917">
+    <text x="572" y="625">- id: Long</text>
+    <text x="572" y="644">- titulo: String</text>
+    <text x="572" y="663">- descricao: String</text>
+    <text x="572" y="682">- preco: Decimal</text>
+    <text x="572" y="701">- imagem: String</text>
+    <text x="572" y="720">- categoria: String</text>
+    <text x="572" y="739">- ehSemente: Boolean</text>
+    <text x="572" y="758">- estoque: Integer</text>
+    <text x="572" y="777">- criadoEm: DateTime</text>
+  </g>
+  <line x1="560" y1="792" x2="850" y2="792" stroke="#16a34a"/>
+  <g font-size="12" fill="#1c1917">
+    <text x="572" y="814">+ calcularMediaAvaliacoes(): Float</text>
+    <text x="572" y="833">+ contarAvaliacoes(): Integer</text>
+    <text x="572" y="852">+ calcularDistancia(usuario): Float</text>
+  </g>
+
+  <!-- Avaliacao -->
+  <rect x="130" y="790" width="300" height="180" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5" rx="3"/>
+  <text x="280" y="818" text-anchor="middle" font-size="16" font-weight="700" fill="#14532d">Avaliacao</text>
+  <line x1="130" y1="833" x2="430" y2="833" stroke="#16a34a"/>
+  <g font-size="12" fill="#1c1917">
+    <text x="142" y="855">- id: Long</text>
+    <text x="142" y="874">- estrelas: Integer</text>
+    <text x="142" y="893">- comentario: String</text>
+    <text x="142" y="912">- criadoEm: DateTime</text>
+  </g>
+  <line x1="130" y1="927" x2="430" y2="927" stroke="#16a34a"/>
+  <g font-size="12" fill="#1c1917">
+    <text x="142" y="949">+ validarEstrelas(): Boolean</text>
+  </g>
+
+  <!-- Mensagem -->
+  <rect x="970" y="790" width="300" height="180" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5" rx="3"/>
+  <text x="1120" y="818" text-anchor="middle" font-size="16" font-weight="700" fill="#14532d">Mensagem</text>
+  <line x1="970" y1="833" x2="1270" y2="833" stroke="#16a34a"/>
+  <g font-size="12" fill="#1c1917">
+    <text x="982" y="855">- id: Long</text>
+    <text x="982" y="874">- conteudo: String</text>
+    <text x="982" y="893">- lida: Boolean</text>
+    <text x="982" y="912">- criadoEm: DateTime</text>
+  </g>
+  <line x1="970" y1="927" x2="1270" y2="927" stroke="#16a34a"/>
+  <g font-size="12" fill="#1c1917">
+    <text x="982" y="949">+ marcarComoLida()</text>
+  </g>
+
+  <g transform="translate(40, 985)">
+    <text x="0" y="0" font-size="12" font-weight="700" fill="#44403c">Legenda:</text>
+    <rect x="85" y="-11" width="14" height="14" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.5"/>
+    <text x="105" y="0" font-size="12" fill="#44403c">Classe abstrata</text>
+    <rect x="235" y="-11" width="14" height="14" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+    <text x="255" y="0" font-size="12" fill="#44403c">Consumidor</text>
+    <rect x="375" y="-11" width="14" height="14" fill="#fce7f3" stroke="#db2777" stroke-width="1.5"/>
+    <text x="395" y="0" font-size="12" fill="#44403c">Produtor</text>
+    <rect x="485" y="-11" width="14" height="14" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+    <text x="505" y="0" font-size="12" fill="#44403c">Entidade do domínio</text>
+    <rect x="675" y="-11" width="14" height="14" fill="#f5f5f4" stroke="#78716c" stroke-width="1.5"/>
+    <text x="695" y="0" font-size="12" fill="#44403c">Utilitário</text>
+    <text x="800" y="0" font-size="12" fill="#44403c" font-style="italic">▽ herança    — associação</text>
+  </g>
+  <text x="1360" y="998" text-anchor="end" font-size="10" fill="#a8a29e" font-style="italic">Mark Fruit · TCC · Maria, Maria, Luiza e Yago</text>
+</svg>
+<p class="hint">Para salvar: clique com o botão direito no diagrama → "Salvar imagem como..."</p>
+</body>
+</html>
