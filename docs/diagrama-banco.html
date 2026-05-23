@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Mark Fruit — Diagrama do banco de dados</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 32px 24px 48px;
+      background: #ffffff;
+      color: #1c1917;
+      font-family: "Segoe UI", "Inter", system-ui, sans-serif;
+    }
+    .page { max-width: 1100px; margin: 0 auto; }
+    header { text-align: center; margin-bottom: 24px; }
+    h1 { font-size: 26px; margin: 0 0 6px; color: #166534; }
+    header p { margin: 0; color: #57534e; font-size: 14px; }
+    .diagram {
+      border: 1px solid #e7e5e4;
+      border-radius: 12px;
+      padding: 24px;
+      background: #fafaf9;
+    }
+    .mermaid { font-size: 16px; }
+    .legend {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+      font-size: 13px;
+    }
+    .legend > div {
+      border: 1px solid #e7e5e4;
+      border-radius: 10px;
+      padding: 12px 14px;
+      background: #fff;
+    }
+    .legend h3 { margin: 0 0 6px; font-size: 14px; color: #166534; }
+    .legend p { margin: 0; color: #44403c; line-height: 1.5; }
+    footer {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: #78716c;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>Mark Fruit — Diagrama Entidade-Relacionamento</h1>
+      <p>Estrutura do banco de dados PostgreSQL (Supabase)</p>
+    </header>
+
+    <div class="diagram">
+      <pre class="mermaid">
+erDiagram
+    PERFIS ||--o{ ANUNCIOS : "publica"
+    PERFIS ||--o{ AVALIACOES : "faz"
+    PERFIS ||--o{ MENSAGENS : "envia/recebe"
+    ANUNCIOS ||--o{ AVALIACOES : "recebe"
+    ANUNCIOS ||--o{ MENSAGENS : "originam"
+
+    PERFIS {
+        uuid id PK "identificador"
+        text nome
+        text papel "CONSUMIDOR ou PRODUTOR"
+        text telefone
+        text cidade
+        text estado
+        text bio
+        text avatar
+        float latitude
+        float longitude
+        timestamp criado_em
+    }
+
+    ANUNCIOS {
+        bigint id PK
+        text titulo
+        text descricao
+        numeric preco
+        text imagem "URL ou caminho"
+        text categoria "Frutas, Verduras, Plantas, Sementes"
+        bool e_semente
+        int estoque
+        uuid autor_id FK "referência a Perfis"
+        timestamp criado_em
+    }
+
+    AVALIACOES {
+        bigint id PK
+        bigint anuncio_id FK
+        uuid usuario_id FK
+        int estrelas "1 a 5"
+        text comentario
+        timestamp criado_em
+    }
+
+    MENSAGENS {
+        bigint id PK
+        bigint anuncio_id FK
+        uuid remetente_id FK
+        uuid destinatario_id FK
+        text conteudo
+        bool lida
+        timestamp criado_em
+    }
+      </pre>
+    </div>
+
+    <div class="legend">
+      <div>
+        <h3>Perfis</h3>
+        <p>Dados estendidos dos usuários (consumidores e produtores). Estende a tabela de autenticação do Supabase.</p>
+      </div>
+      <div>
+        <h3>Anúncios</h3>
+        <p>Produtos publicados pelos produtores: frutas, verduras, mudas e sementes.</p>
+      </div>
+      <div>
+        <h3>Avaliações</h3>
+        <p>Notas de 1 a 5 estrelas com comentário. Cada usuário pode avaliar um anúncio uma única vez.</p>
+      </div>
+      <div>
+        <h3>Mensagens</h3>
+        <p>Conversa em tempo real entre consumidor e produtor sobre um anúncio específico.</p>
+      </div>
+    </div>
+
+    <footer>Trabalho de Conclusão de Curso — Maria, Maria, Luiza e Yago</footer>
+  </div>
+
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: "base",
+      themeVariables: {
+        primaryColor: "#dcfce7",
+        primaryTextColor: "#14532d",
+        primaryBorderColor: "#16a34a",
+        lineColor: "#16a34a",
+        fontFamily: "Segoe UI, Inter, system-ui, sans-serif",
+        fontSize: "15px",
+        background: "#ffffff",
+      },
+    });
+  </script>
+</body>
+</html>
