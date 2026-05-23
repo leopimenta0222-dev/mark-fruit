@@ -1,0 +1,106 @@
+@startuml ClassesMarkFruit
+' Mark Fruit - Diagrama de Classes
+' Cole este codigo em https://www.plantuml.com/plantuml/uml/
+
+skinparam backgroundColor #FFFFFF
+skinparam class {
+    BackgroundColor #DCFCE7
+    BorderColor #16A34A
+    ArrowColor #44403C
+    AttributeFontColor #1C1917
+}
+
+title Sistema Mark Fruit - Diagrama de Classes
+
+' === Hierarquia de usuarios ===
+abstract class Usuario {
+    - id: UUID
+    - nome: String
+    - email: String
+    - senha: String
+    - telefone: String
+    - cidade: String
+    - estado: String
+    - bio: String
+    - latitude: Float
+    - longitude: Float
+    --
+    + cadastrar()
+    + login(email, senha): Token
+    + logout()
+    + editarPerfil(dados)
+    + atualizarLocalizacao(lat, lon)
+}
+
+class Consumidor {
+    + avaliarProduto(anuncio, estrelas, comentario)
+    + removerAvaliacao(anuncio)
+    + iniciarChat(produtor, anuncio)
+    + enviarMensagem(destinatario, conteudo)
+    + buscarProdutos(termo, categoria)
+    + consultarBot(pergunta)
+}
+
+class Produtor {
+    + criarAnuncio(titulo, descricao, preco, imagem)
+    + editarAnuncio(id, dados)
+    + excluirAnuncio(id)
+    + listarMeusAnuncios()
+    + responderMensagem(destinatario, conteudo)
+}
+
+Usuario <|-- Consumidor
+Usuario <|-- Produtor
+
+' === Entidades do dominio ===
+class Anuncio {
+    - id: Long
+    - titulo: String
+    - descricao: String
+    - preco: Decimal
+    - imagem: String
+    - categoria: String
+    - ehSemente: Boolean
+    - estoque: Integer
+    - criadoEm: DateTime
+    --
+    + calcularMediaAvaliacoes(): Float
+    + contarAvaliacoes(): Integer
+    + calcularDistancia(usuario): Float
+}
+
+class Avaliacao {
+    - id: Long
+    - estrelas: Integer
+    - comentario: String
+    - criadoEm: DateTime
+    --
+    + validarEstrelas(): Boolean
+}
+
+class Mensagem {
+    - id: Long
+    - conteudo: String
+    - lida: Boolean
+    - criadoEm: DateTime
+    --
+    + marcarComoLida()
+}
+
+class Bot {
+    - plantas: String[]
+    --
+    + responder(pergunta): String
+    + listarTopicos(): String[]
+}
+
+' === Relacionamentos ===
+Produtor "1" --> "0..*" Anuncio : publica
+Anuncio "1" --> "0..*" Avaliacao : possui
+Consumidor "1" --> "0..*" Avaliacao : escreve
+Anuncio "1" --> "0..*" Mensagem : sobre
+Usuario "1" --> "0..*" Mensagem : envia >
+Usuario "1" --> "0..*" Mensagem : recebe >
+Consumidor ..> Bot : consulta
+
+@enduml

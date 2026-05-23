@@ -1,0 +1,86 @@
+@startuml CasosDeUsoMarkFruit
+' Mark Fruit - Diagrama de Casos de Uso
+' Cole este codigo em https://www.plantuml.com/plantuml/uml/
+
+skinparam backgroundColor #FFFFFF
+skinparam usecase {
+    BackgroundColor #DCFCE7
+    BorderColor #16A34A
+    ArrowColor #44403C
+}
+skinparam actor {
+    BackgroundColor #FFFFFF
+    BorderColor #16A34A
+}
+skinparam rectangle {
+    BackgroundColor #FAFAF9
+    BorderColor #A8A29E
+}
+
+left to right direction
+title Sistema Mark Fruit - Casos de Uso
+
+' === Atores ===
+actor "Visitante" as V
+actor "Consumidor" as C
+actor "Produtor" as P
+
+' Heranca: Consumidor e Produtor sao usuarios autenticados
+' (herdam tudo que o Visitante pode fazer)
+V <|-- C
+V <|-- P
+
+' === Sistema ===
+rectangle "Sistema Mark Fruit" {
+
+    ' Casos de uso do Visitante (publico)
+    usecase "Cadastrar-se" as UC1
+    usecase "Fazer login" as UC2
+    usecase "Buscar produtos" as UC3
+    usecase "Visualizar anúncio" as UC4
+    usecase "Consultar bot\n'Como Plantar'" as UC5
+
+    ' Casos de uso do Consumidor
+    usecase "Avaliar produto" as UC6
+    usecase "Iniciar conversa\ncom produtor" as UC7
+    usecase "Enviar mensagem" as UC8
+
+    ' Casos de uso do Produtor
+    usecase "Criar anúncio" as UC9
+    usecase "Editar anúncio" as UC10
+    usecase "Excluir anúncio" as UC11
+    usecase "Responder\nmensagens" as UC12
+
+    ' Comuns ao Consumidor e Produtor
+    usecase "Editar perfil" as UC13
+    usecase "Atualizar\nlocalização" as UC14
+}
+
+' === Relacoes Visitante ===
+V --> UC1
+V --> UC2
+V --> UC3
+V --> UC4
+V --> UC5
+
+' === Relacoes Consumidor ===
+C --> UC6
+C --> UC7
+C --> UC8
+C --> UC13
+C --> UC14
+
+' === Relacoes Produtor ===
+P --> UC9
+P --> UC10
+P --> UC11
+P --> UC12
+P --> UC13
+P --> UC14
+
+' Relacionamentos entre casos de uso
+UC7 ..> UC8 : <<include>>
+UC9 ..> UC2 : <<include>>
+UC6 ..> UC2 : <<include>>
+
+@enduml
