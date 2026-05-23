@@ -1,0 +1,52 @@
+// =============================================================
+// Mark Fruit - Diagrama de Classes (yUML)
+//
+// COMO USAR:
+// 1. Acesse: https://yuml.me/diagram/nofunky/class/edit
+//    (nofunky = estilo limpo com linhas retas)
+// 2. Apague o exemplo padrao do editor
+// 3. Cole TODO o codigo abaixo (a partir da linha "// === USUARIO ===")
+// 4. Botao direito na imagem -> "Salvar imagem como..."
+//
+// Trocar estilo na URL: scruffy (desenhado a mao) ou plain (P&B)
+// =============================================================
+
+// === USUARIO (classe abstrata, amarelo) ===
+[<<abstract>>;Usuario|id: UUID;nome: String;email: String;senha: String;telefone: String;cidade: String;estado: String;bio: String;latitude: Float;longitude: Float|cadastrar();login(email, senha);logout();editarPerfil(dados);atualizarLocalizacao(lat, lon){bg:lightyellow}]
+
+// === CONSUMIDOR (azul) ===
+[Consumidor|+ avaliarProduto(anuncio, estrelas, com);+ removerAvaliacao(anuncio);+ iniciarChat(produtor, anuncio);+ enviarMensagem(dest, conteudo);+ buscarProdutos(termo, cat);+ consultarBot(pergunta){bg:lightblue}]
+
+// === PRODUTOR (rosa) ===
+[Produtor|+ criarAnuncio(titulo, desc, preco, img);+ editarAnuncio(id, dados);+ excluirAnuncio(id);+ listarMeusAnuncios();+ responderMensagem(dest, conteudo){bg:lightpink}]
+
+// === ANUNCIO (verde) ===
+[Anuncio|- id: Long;- titulo: String;- descricao: String;- preco: Decimal;- imagem: String;- categoria: String;- ehSemente: Boolean;- estoque: Integer;- criadoEm: DateTime|+ calcularMediaAvaliacoes(): Float;+ contarAvaliacoes(): Integer;+ calcularDistancia(usuario): Float{bg:palegreen}]
+
+// === AVALIACAO (verde) ===
+[Avaliacao|- id: Long;- estrelas: Integer;- comentario: String;- criadoEm: DateTime|+ validarEstrelas(): Boolean{bg:palegreen}]
+
+// === MENSAGEM (verde) ===
+[Mensagem|- id: Long;- conteudo: String;- lida: Boolean;- criadoEm: DateTime|+ marcarComoLida(){bg:palegreen}]
+
+// === BOT (cinza, utilitario) ===
+[Bot|- plantas: String[]|+ responder(pergunta): String;+ listarTopicos(): String[]{bg:wheat}]
+
+// === RELACIONAMENTOS ===
+
+// Heranca: Consumidor e Produtor sao Usuarios
+[Usuario]^-[Consumidor]
+[Usuario]^-[Produtor]
+
+// Producao: 1 Produtor cria varios Anuncios
+[Produtor]1-0..*[Anuncio]
+
+// Avaliacoes: 1 Anuncio recebe varias avaliacoes, 1 Consumidor faz varias
+[Anuncio]1-0..*[Avaliacao]
+[Consumidor]1-0..*[Avaliacao]
+
+// Mensagens: 1 Anuncio gera varias mensagens
+[Anuncio]1-0..*[Mensagem]
+
+// Dependencia: Consumidor consulta o Bot
+[Consumidor]-.->[Bot]
