@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Mark Fruit — Diagrama de Classes</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 32px 24px 48px;
+      background: #ffffff;
+      color: #1c1917;
+      font-family: "Segoe UI", "Inter", system-ui, sans-serif;
+    }
+    .page { max-width: 1200px; margin: 0 auto; }
+    header { text-align: center; margin-bottom: 24px; }
+    h1 { font-size: 26px; margin: 0 0 6px; color: #166534; }
+    header p { margin: 0; color: #57534e; font-size: 14px; }
+    .diagram {
+      border: 1px solid #e7e5e4;
+      border-radius: 12px;
+      padding: 24px;
+      background: #fafaf9;
+    }
+    .mermaid { font-size: 16px; }
+    footer {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: #78716c;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>Mark Fruit — Diagrama de Classes (UML)</h1>
+      <p>Estrutura orientada a objetos do sistema</p>
+    </header>
+
+    <div class="diagram">
+      <pre class="mermaid">
+classDiagram
+    class Usuario {
+        +UUID id
+        +String nome
+        +String email
+        +String senha
+        +String telefone
+        +String cidade
+        +String estado
+        +String bio
+        +Float latitude
+        +Float longitude
+        +cadastrar()
+        +login(email, senha)
+        +logout()
+        +editarPerfil(dados)
+        +atualizarLocalizacao(lat, lon)
+    }
+
+    class Consumidor {
+        +avaliarProduto(anuncio, estrelas, comentario)
+        +removerAvaliacao(anuncio)
+        +iniciarChat(produtor, anuncio)
+        +enviarMensagem(destinatario, conteudo)
+        +buscarProdutos(termo, categoria)
+        +consultarBot(pergunta)
+    }
+
+    class Produtor {
+        +criarAnuncio(titulo, descricao, preco, imagem, categoria)
+        +editarAnuncio(id, dados)
+        +excluirAnuncio(id)
+        +listarMeusAnuncios()
+        +responderMensagem(destinatario, conteudo)
+    }
+
+    class Anuncio {
+        +Long id
+        +String titulo
+        +String descricao
+        +Decimal preco
+        +String imagem
+        +String categoria
+        +Boolean ehSemente
+        +Integer estoque
+        +DateTime criadoEm
+        +calcularMediaAvaliacoes() Float
+        +contarAvaliacoes() Integer
+        +calcularDistancia(usuario) Float
+    }
+
+    class Avaliacao {
+        +Long id
+        +Integer estrelas
+        +String comentario
+        +DateTime criadoEm
+        +validarEstrelas() Boolean
+    }
+
+    class Mensagem {
+        +Long id
+        +String conteudo
+        +Boolean lida
+        +DateTime criadoEm
+        +marcarComoLida()
+    }
+
+    class Bot {
+        +String[] plantas
+        +responder(pergunta) String
+        +listarTopicos() String[]
+    }
+
+    Usuario &lt;|-- Consumidor
+    Usuario &lt;|-- Produtor
+    Produtor "1" --&gt; "0..*" Anuncio : publica
+    Anuncio "1" --&gt; "0..*" Avaliacao : possui
+    Consumidor "1" --&gt; "0..*" Avaliacao : escreve
+    Anuncio "1" --&gt; "0..*" Mensagem : tem
+    Usuario "1" --&gt; "0..*" Mensagem : envia
+      </pre>
+    </div>
+
+    <footer>Trabalho de Conclusão de Curso — Maria, Maria, Luiza e Yago</footer>
+  </div>
+
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: "base",
+      themeVariables: {
+        primaryColor: "#dcfce7",
+        primaryTextColor: "#14532d",
+        primaryBorderColor: "#16a34a",
+        lineColor: "#16a34a",
+        fontFamily: "Segoe UI, Inter, system-ui, sans-serif",
+        fontSize: "14px",
+        background: "#ffffff",
+      },
+    });
+  </script>
+</body>
+</html>
