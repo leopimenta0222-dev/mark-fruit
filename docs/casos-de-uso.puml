@@ -1,6 +1,6 @@
 @startuml CasosDeUsoMarkFruit
 ' Mark Fruit - Diagrama de Casos de Uso
-' Cole este codigo em https://www.plantuml.com/plantuml/uml/
+' Cole este codigo em https://www.plantuml.com/plantuml/uml/ ou https://planttext.com/
 
 skinparam backgroundColor #FFFFFF
 skinparam usecase {
@@ -16,6 +16,7 @@ skinparam rectangle {
     BackgroundColor #FAFAF9
     BorderColor #A8A29E
 }
+skinparam packageStyle rectangle
 
 left to right direction
 title Sistema Mark Fruit - Casos de Uso
@@ -33,54 +34,63 @@ V <|-- P
 ' === Sistema ===
 rectangle "Sistema Mark Fruit" {
 
-    ' Casos de uso do Visitante (publico)
+    ' Acesso (publico - Visitante)
     usecase "Cadastrar-se" as UC1
     usecase "Fazer login" as UC2
     usecase "Buscar produtos" as UC3
     usecase "Visualizar anúncio" as UC4
     usecase "Consultar bot\n'Como Plantar'" as UC5
 
-    ' Casos de uso do Consumidor
-    usecase "Avaliar produto" as UC6
-    usecase "Iniciar conversa\ncom produtor" as UC7
-    usecase "Enviar mensagem" as UC8
+    ' Conta autenticada (Consumidor e Produtor)
+    usecase "Sair" as UC6
+    usecase "Editar perfil" as UC7
+    usecase "Atualizar\nlocalização" as UC8
+    usecase "Ver minhas\nconversas" as UC9
 
-    ' Casos de uso do Produtor
-    usecase "Criar anúncio" as UC9
-    usecase "Editar anúncio" as UC10
-    usecase "Excluir anúncio" as UC11
-    usecase "Responder\nmensagens" as UC12
+    ' Consumidor
+    usecase "Avaliar produto" as UC10
+    usecase "Remover\navaliação" as UC11
+    usecase "Iniciar conversa\ncom produtor" as UC12
+    usecase "Enviar mensagem" as UC13
 
-    ' Comuns ao Consumidor e Produtor
-    usecase "Editar perfil" as UC13
-    usecase "Atualizar\nlocalização" as UC14
+    ' Produtor
+    usecase "Criar anúncio" as UC14
+    usecase "Editar anúncio" as UC15
+    usecase "Excluir anúncio" as UC16
+    usecase "Responder\nmensagens" as UC17
 }
 
-' === Relacoes Visitante ===
+' === Relacoes do Visitante ===
 V --> UC1
 V --> UC2
 V --> UC3
 V --> UC4
 V --> UC5
 
-' === Relacoes Consumidor ===
+' === Relacoes comuns (Consumidor e Produtor) ===
 C --> UC6
 C --> UC7
 C --> UC8
-C --> UC13
-C --> UC14
-
-' === Relacoes Produtor ===
+C --> UC9
+P --> UC6
+P --> UC7
+P --> UC8
 P --> UC9
-P --> UC10
-P --> UC11
-P --> UC12
-P --> UC13
-P --> UC14
 
-' Relacionamentos entre casos de uso
-UC7 ..> UC8 : <<include>>
-UC9 ..> UC2 : <<include>>
-UC6 ..> UC2 : <<include>>
+' === Especificas do Consumidor ===
+C --> UC10
+C --> UC11
+C --> UC12
+C --> UC13
+
+' === Especificas do Produtor ===
+P --> UC14
+P --> UC15
+P --> UC16
+P --> UC17
+
+' === Relacionamento <<include>> verdadeiro ===
+' Iniciar uma conversa sempre envolve enviar a primeira mensagem.
+UC12 ..> UC13 : <<include>>
 
 @enduml
