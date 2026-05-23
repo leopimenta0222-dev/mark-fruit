@@ -1,0 +1,52 @@
+// =============================================================
+// Mark Fruit - Diagrama de Casos de Uso (yUML)
+//
+// Como gerar a imagem:
+// 1. Acesse https://yuml.me/diagram/scruffy/usecase/edit
+// 2. Apague o exemplo padrão e cole TODO o código abaixo
+//    (a partir da linha "// === HERANÇA DE ATORES === ")
+// 3. A imagem aparece automaticamente
+// 4. Clique com o botão direito na imagem -> "Salvar imagem como"
+//
+// Para outros estilos, troque "scruffy" na URL por:
+//   - nofunky   (linhas retas, mais formal)
+//   - plain     (preto e branco, bem simples)
+// =============================================================
+
+// === HERANÇA DE ATORES ===
+// Consumidor e Produtor são usuários autenticados; herdam tudo
+// que o Visitante (anônimo) já consegue fazer.
+[Visitante]^-[Consumidor]
+[Visitante]^-[Produtor]
+
+// === PÚBLICO (sem precisar de login) ===
+[Visitante]-(Cadastrar-se)
+[Visitante]-(Fazer login)
+[Visitante]-(Buscar produtos)
+[Visitante]-(Filtrar por categoria)
+[Visitante]-(Visualizar anúncio)
+[Visitante]-(Consultar bot Como Plantar)
+
+// === CONSUMIDOR (logado, comprador) ===
+[Consumidor]-(Sair)
+[Consumidor]-(Editar perfil)
+[Consumidor]-(Atualizar localização)
+[Consumidor]-(Ver minhas conversas)
+[Consumidor]-(Avaliar produto)
+[Consumidor]-(Remover avaliação)
+[Consumidor]-(Iniciar conversa com produtor)
+[Consumidor]-(Enviar mensagem)
+
+// === PRODUTOR (logado, vendedor) ===
+[Produtor]-(Sair)
+[Produtor]-(Editar perfil)
+[Produtor]-(Atualizar localização)
+[Produtor]-(Ver minhas conversas)
+[Produtor]-(Criar anúncio)
+[Produtor]-(Editar anúncio)
+[Produtor]-(Excluir anúncio)
+[Produtor]-(Responder mensagens)
+
+// === RELACIONAMENTO <<include>> ===
+// Iniciar uma conversa sempre envolve enviar a primeira mensagem
+(Iniciar conversa com produtor)>(Enviar mensagem)
