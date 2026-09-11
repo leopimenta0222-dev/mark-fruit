@@ -29,3 +29,6 @@ Thumbs.db
 
 # Worktrees do Claude Code
 .claude/worktrees/
+
+# Worktrees locais do Codex
+.worktrees/
