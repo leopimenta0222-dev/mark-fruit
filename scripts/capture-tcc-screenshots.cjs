@@ -27,6 +27,10 @@ async function settle(page) {
 async function capture(page, filename, pathname, loadingText = "") {
   if (pathname) await page.goto(`${baseUrl}${pathname}`, { waitUntil: "domcontentloaded" });
   await settle(page);
+  await page
+    .getByText(/^Carregando(?: .+)?\.\.\.$/)
+    .first()
+    .waitFor({ state: "hidden", timeout: 15000 });
   if (loadingText) {
     await page.getByText(loadingText, { exact: true }).waitFor({ state: "hidden", timeout: 15000 });
   }
