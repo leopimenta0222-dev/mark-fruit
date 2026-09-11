@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import {
-  MessageCircle, MapPin, Send, Trash2, ShoppingCart, Zap, Truck,
-  ShieldCheck, RotateCcw, ChevronRight, Minus, Plus, Store, Heart
+  MessageCircle, MapPin, Send, Trash2, ShoppingCart,
+  ChevronRight, Minus, Plus, Store
 } from "lucide-react";
 import { resolveImage } from "../services/supabase.js";
 import { getPost, ratePost, deleteRating, deletePost } from "../services/db.js";
 import { useAuth } from "../context/AuthContext.jsx";
+import { useCart } from "../context/CartContext.jsx";
 import Stars from "../components/Stars.jsx";
 
 function fmtPrice(v) {
@@ -20,10 +21,11 @@ export default function PostDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { addItem } = useCart();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // compra (ainda não processa pagamento)
+  // compra
   const [qty, setQty] = useState(1);
   const [buyMsg, setBuyMsg] = useState("");
 
@@ -83,12 +85,16 @@ export default function PostDetail() {
   }
 
   function handleBuy(tipo) {
-    setBuyMsg(
-      tipo === "buy"
-        ? "Pagamento ainda em desenvolvimento — em breve você poderá finalizar a compra aqui."
-        : "Carrinho ainda em desenvolvimento — funcionalidade chegando em breve."
-    );
-    setTimeout(() => setBuyMsg(""), 4000);
+    if (!user) {
+      navigate("/login", { state: { from: `/post/${post.id}` } });
+      return;
+    }
+    addItem(post, qty);
+    if (tipo === "buy") {
+      navigate("/checkout");
+      return;
+    }
+    setBuyMsg("Produto adicionado ao carrinho.");
   }
 
   if (loading || !post) return <div className="p-8 text-center text-stone-500">Carregando...</div>;
@@ -96,13 +102,6 @@ export default function PostDetail() {
   const isOwner = user?.id === post.author.id;
   const myRating = post.ratings.find((r) => r.userId === user?.id);
 
-  // dados comerciais (mesma lógica do card)
-  const installments = Math.min(10, Math.max(1, Math.floor(post.price / 5)));
-  const installmentValue = post.price / installments;
-  const freeShipping = post.price >= 30;
-  const showDiscount = post.id % 3 === 0;
-  const oldPrice = showDiscount ? post.price * 1.2 : null;
-  const discountPct = showDiscount ? 20 : null;
   const total = post.price * qty;
 
   return (
@@ -128,11 +127,6 @@ export default function PostDetail() {
                   alt={post.title}
                   className="w-full aspect-square object-cover rounded-lg"
                 />
-                {discountPct && (
-                  <span className="absolute top-3 left-3 px-2.5 py-1 text-xs font-bold bg-red-500 text-white rounded">
-                    -{discountPct}% OFF
-                  </span>
-                )}
               </div>
             </div>
 
@@ -153,25 +147,11 @@ export default function PostDetail() {
 
               {/* Preço */}
               <div className="mt-4">
-                {oldPrice && (
-                  <p className="text-sm text-stone-400 line-through">{fmtPrice(oldPrice)}</p>
-                )}
-                <div className="flex items-center gap-2">
-                  <span className="text-4xl font-light text-stone-900 dark:text-stone-50">{fmtPrice(post.price)}</span>
-                  {discountPct && (
-                    <span className="text-sm font-bold text-brand-600">{discountPct}% OFF</span>
-                  )}
-                </div>
-                <p className="mt-1 text-sm text-brand-700 font-medium">
-                  em {installments}x de {fmtPrice(installmentValue)} sem juros
+                <span className="text-4xl font-light text-stone-900 dark:text-stone-50">{fmtPrice(post.price)}</span>
+                <p className="mt-2 text-sm text-stone-500 dark:text-stone-400">
+                  Entrega ou retirada combinada no checkout.
                 </p>
               </div>
-
-              {freeShipping && (
-                <p className="mt-3 inline-flex items-center gap-1.5 text-sm font-bold text-brand-700">
-                  <Truck size={16}/> Frete grátis
-                </p>
-              )}
 
               <div className="mt-5 pt-5 border-t border-stone-100 dark:border-stone-700">
                 <h3 className="font-bold text-stone-800 dark:text-stone-100 mb-2">Descrição</h3>
@@ -233,7 +213,7 @@ export default function PostDetail() {
                       disabled={post.stock <= 0}
                       className="btn-primary w-full !py-3"
                     >
-                      <Zap size={18}/> Comprar agora
+                      <ShoppingCart size={18}/> Comprar agora
                     </button>
                     <button
                       onClick={() => handleBuy("cart")}
@@ -244,11 +224,6 @@ export default function PostDetail() {
                     </button>
                     <button onClick={startChat} className="btn-secondary w-full !py-3">
                       <MessageCircle size={18}/> Conversar com o produtor
-                    </button>
-                    <button
-                      className="w-full btn !py-2 text-stone-500 hover:text-red-500 hover:bg-stone-100"
-                    >
-                      <Heart size={16}/> Favoritar
                     </button>
                   </div>
                 ) : (
@@ -263,16 +238,13 @@ export default function PostDetail() {
                 )}
 
                 {buyMsg && (
-                  <div className="text-xs bg-amber-50 border border-amber-200 text-amber-800 rounded-lg p-2.5">
+                  <div role="status" className="text-xs bg-brand-50 border border-brand-200 text-brand-800 rounded-lg p-2.5">
                     {buyMsg}
                   </div>
                 )}
 
                 {/* Vendedor */}
-                <Link
-                  to={`/produtor/${post.author.id}`}
-                  className="block pt-4 border-t border-stone-200 dark:border-stone-700"
-                >
+                <div className="block pt-4 border-t border-stone-200 dark:border-stone-700">
                   <p className="text-xs text-stone-500 dark:text-stone-400 mb-1.5 flex items-center gap-1">
                     <Store size={12}/> Vendido por
                   </p>
@@ -292,22 +264,6 @@ export default function PostDetail() {
                       )}
                     </div>
                   </div>
-                </Link>
-
-                {/* Selos de confiança */}
-                <div className="pt-4 border-t border-stone-200 dark:border-stone-700 space-y-2 text-xs text-stone-600 dark:text-stone-300">
-                  <p className="flex items-center gap-2">
-                    <ShieldCheck size={15} className="text-brand-600 shrink-0"/>
-                    Compra protegida — receba o produto ou seu dinheiro de volta
-                  </p>
-                  <p className="flex items-center gap-2">
-                    <RotateCcw size={15} className="text-brand-600 shrink-0"/>
-                    Devolução grátis em até 7 dias
-                  </p>
-                  <p className="flex items-center gap-2">
-                    <Truck size={15} className="text-brand-600 shrink-0"/>
-                    {freeShipping ? "Frete grátis para sua região" : "Frete calculado na finalização"}
-                  </p>
                 </div>
               </div>
             </div>

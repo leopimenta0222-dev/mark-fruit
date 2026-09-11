@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import {
-  Search, MapPin, TrendingUp, Sparkles, Flame, Star, Apple, Salad, Flower2,
-  Sprout as SeedIcon, Truck, ShieldCheck, BookOpen
+  MapPin, TrendingUp, Sparkles, Flame, Star, Apple, Salad, Flower2,
+  Sprout as SeedIcon, BookOpen, MessageCircle
 } from "lucide-react";
 import { listPosts } from "../services/db.js";
 import PostCard from "../components/PostCard.jsx";
@@ -81,26 +81,29 @@ export default function Home() {
     <div className="bg-stone-100 dark:bg-stone-950 min-h-[calc(100vh-7rem)]">
       {/* Hero / Banner */}
       {!isFiltering && (
-        <section className="bg-gradient-to-r from-brand-600 via-brand-500 to-emerald-500 text-white">
-          <div className="max-w-7xl mx-auto px-4 py-10 md:py-14">
+        <section className="bg-brand-900 text-white overflow-hidden">
+          <div className="max-w-7xl mx-auto px-4 py-9 md:py-12 grid md:grid-cols-[1.1fr_.9fr] gap-8 items-center">
             <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 text-xs font-bold mb-3">
-                100% direto do produtor
-              </div>
-              <h1 className="text-3xl md:text-5xl font-extrabold leading-tight">
-                Frutas, verduras e plantas <span className="text-amber-200">fresquinhas</span>
+              <p className="text-sm font-semibold text-amber-300 mb-3">Da região para a sua mesa</p>
+              <h1 className="text-3xl md:text-5xl font-extrabold leading-[1.08]">
+                Produtos locais, direto de quem produz
               </h1>
-              <p className="mt-3 text-brand-50 md:text-lg">
-                Sem atravessador, sem agrotóxico e perto de você.
+              <p className="mt-4 text-brand-100 md:text-lg max-w-xl">
+                Encontre frutas, verduras, plantas e sementes. Conheça o produtor e combine entrega ou retirada.
               </p>
-              <div className="mt-5 flex gap-3 flex-wrap">
+              <div className="mt-6 flex gap-3 flex-wrap">
                 <Link to="/?category=Frutas" className="px-5 py-2.5 bg-white text-brand-700 font-bold rounded-lg hover:bg-brand-50 transition">
-                  Ver frutas
+                  Explorar produtos
                 </Link>
                 <Link to="/como-plantar" className="px-5 py-2.5 bg-white/10 hover:bg-white/20 border border-white/30 font-bold rounded-lg transition flex items-center gap-2">
                   <BookOpen size={16}/> Aprender a plantar
                 </Link>
               </div>
+            </div>
+            <div className="hidden md:grid grid-cols-2 grid-rows-2 gap-3 h-64" aria-hidden="true">
+              <img src="/products/tomate.png" alt="" className="row-span-2 w-full h-full object-cover rounded-3xl rounded-bl-lg" />
+              <img src="/products/manga.jpg" alt="" className="w-full h-full object-cover rounded-3xl rounded-tr-lg" />
+              <img src="/products/alface.png" alt="" className="w-full h-full object-cover rounded-3xl rounded-br-lg" />
             </div>
           </div>
         </section>
@@ -111,16 +114,16 @@ export default function Home() {
         <div className="bg-white border-b border-stone-200 dark:bg-stone-900 dark:border-stone-700">
           <div className="max-w-7xl mx-auto px-4 py-3 grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
             <div className="flex items-center gap-2 text-stone-700 dark:text-stone-300">
-              <Truck size={18} className="text-brand-600"/> Frete grátis acima de R$ 30
+              <MapPin size={18} className="text-brand-600"/> Produtores da sua região
             </div>
             <div className="flex items-center gap-2 text-stone-700 dark:text-stone-300">
-              <ShieldCheck size={18} className="text-brand-600"/> Compra protegida
+              <MessageCircle size={18} className="text-brand-600"/> Converse antes de comprar
             </div>
             <div className="flex items-center gap-2 text-stone-700 dark:text-stone-300">
-              <Star size={18} className="text-amber-500"/> Produtores avaliados
+              <Star size={18} className="text-amber-500"/> Avaliações da comunidade
             </div>
             <div className="flex items-center gap-2 text-stone-700 dark:text-stone-300">
-              <MapPin size={18} className="text-brand-600"/> Perto de você
+              <BookOpen size={18} className="text-brand-600"/> Aprenda a plantar
             </div>
           </div>
         </div>
