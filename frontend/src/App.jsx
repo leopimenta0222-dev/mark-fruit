@@ -10,6 +10,7 @@ import NewPost from "./pages/NewPost.jsx";
 import ComoPlantar from "./pages/ComoPlantar.jsx";
 import Conversations from "./pages/Conversations.jsx";
 import Chat from "./pages/Chat.jsx";
+import Cart from "./pages/Cart.jsx";
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="/cadastro" element={<Register />} />
           <Route path="/como-plantar" element={<ComoPlantar />} />
           <Route path="/post/:id" element={<PostDetail />} />
+          <Route path="/carrinho" element={<Cart />} />
           <Route path="/perfil" element={<PrivateRoute><Profile /></PrivateRoute>} />
           <Route path="/posts/novo" element={<PrivateRoute producerOnly><NewPost /></PrivateRoute>} />
           <Route path="/chats" element={<PrivateRoute><Conversations /></PrivateRoute>} />

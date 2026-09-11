@@ -2,9 +2,11 @@ import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   Sprout, Search, User, LogOut, MessageCircle, Plus, BookOpen,
-  MapPin, Apple, Salad, Flower2, Sprout as SeedIcon, ChevronDown, Sun, Moon
+  MapPin, Apple, Salad, Flower2, Sprout as SeedIcon, ChevronDown, Sun, Moon,
+  ShoppingCart, ClipboardList, Home as HomeIcon
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext.jsx";
+import { useCart } from "../context/CartContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 
 const CATEGORIES = [
@@ -16,10 +18,15 @@ const CATEGORIES = [
 
 export default function Navbar() {
   const { user, logout } = useAuth();
+  const { itemCount } = useCart();
   const { dark, toggle } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const [q, setQ] = useState("");
+  const [accountOpen, setAccountOpen] = useState(false);
+
+  const ordersHref = user?.role === "PRODUCER" ? "/pedidos-recebidos" : "/pedidos";
+  const ordersLabel = user?.role === "PRODUCER" ? "Pedidos recebidos" : "Meus pedidos";
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -52,12 +59,13 @@ export default function Navbar() {
           <form onSubmit={submitSearch} className="flex-1 max-w-3xl">
             <div className="flex items-stretch bg-white rounded-lg overflow-hidden shadow-sm">
               <input
+                aria-label="Buscar produtos"
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 placeholder="Buscar tomate, alface, semente de morango..."
                 className="flex-1 px-4 py-2.5 text-stone-800 placeholder:text-stone-400 outline-none text-sm"
               />
-              <button type="submit" className="px-5 bg-stone-50 hover:bg-stone-100 text-stone-600 border-l border-stone-200">
+              <button aria-label="Buscar" type="submit" className="px-4 md:px-5 bg-stone-50 hover:bg-stone-100 text-stone-600 border-l border-stone-200">
                 <Search size={20}/>
               </button>
             </div>
@@ -72,6 +80,19 @@ export default function Navbar() {
             {dark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
 
+          <Link
+            to="/carrinho"
+            aria-label={`Carrinho com ${itemCount} ${itemCount === 1 ? "item" : "itens"}`}
+            className="relative shrink-0 w-11 h-11 grid place-items-center rounded-lg hover:bg-brand-700 text-white"
+          >
+            <ShoppingCart size={20}/>
+            {itemCount > 0 && (
+              <span className="absolute right-0 top-0 min-w-5 h-5 px-1 rounded-full bg-amber-300 text-amber-950 text-[11px] font-bold grid place-items-center">
+                {itemCount > 99 ? "99+" : itemCount}
+              </span>
+            )}
+          </Link>
+
           {/* Right area */}
           <div className="hidden md:flex items-center gap-1 shrink-0">
             {user ? (
@@ -79,35 +100,43 @@ export default function Navbar() {
                 <Link to="/chats" className="px-3 py-2 rounded-lg hover:bg-brand-700 flex items-center gap-1 text-sm">
                   <MessageCircle size={16}/> Conversas
                 </Link>
+                <Link to={ordersHref} className="px-3 py-2 rounded-lg hover:bg-brand-700 flex items-center gap-1 text-sm">
+                  <ClipboardList size={16}/> {ordersLabel}
+                </Link>
                 {user.role === "PRODUCER" && (
                   <Link to="/posts/novo" className="px-3 py-2 rounded-lg bg-brand-500 hover:bg-brand-400 flex items-center gap-1 text-sm font-semibold">
                     <Plus size={16}/> Anunciar
                   </Link>
                 )}
-                <div className="relative group">
-                  <button className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-brand-700">
+                <div className="relative">
+                  <button
+                    aria-label="Abrir menu da conta"
+                    aria-expanded={accountOpen}
+                    onClick={() => setAccountOpen((open) => !open)}
+                    className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-brand-700"
+                  >
                     <div className="w-8 h-8 rounded-full bg-white text-brand-700 grid place-items-center font-bold">
                       {user.name?.[0]?.toUpperCase()}
                     </div>
                     <ChevronDown size={14}/>
                   </button>
-                  <div className="absolute right-0 top-full mt-1 w-56 bg-white text-stone-700 rounded-xl shadow-xl border border-stone-100 dark:bg-stone-800 dark:text-stone-200 dark:border-stone-700 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition py-2">
+                  {accountOpen && <div className="absolute right-0 top-full mt-1 w-56 bg-white text-stone-700 rounded-xl shadow-xl border border-stone-100 dark:bg-stone-800 dark:text-stone-200 dark:border-stone-700 py-2">
                     <div className="px-4 py-2 border-b border-stone-100 dark:border-stone-700">
                       <p className="font-semibold text-sm">{user.name}</p>
                       <p className="text-xs text-stone-500 dark:text-stone-400">
                         {user.role === "PRODUCER" ? "Produtor" : "Consumidor"}
                       </p>
                     </div>
-                    <Link to="/perfil" className="flex items-center gap-2 px-4 py-2 hover:bg-stone-50 dark:hover:bg-stone-700 text-sm">
+                    <Link onClick={() => setAccountOpen(false)} to="/perfil" className="flex items-center gap-2 px-4 py-2 hover:bg-stone-50 dark:hover:bg-stone-700 text-sm">
                       <User size={14}/> Meu perfil
                     </Link>
                     <button
-                      onClick={() => { logout(); navigate("/login"); }}
+                      onClick={() => { setAccountOpen(false); logout(); navigate("/login"); }}
                       className="w-full flex items-center gap-2 px-4 py-2 hover:bg-stone-50 dark:hover:bg-stone-700 text-sm text-red-600"
                     >
                       <LogOut size={14}/> Sair
                     </button>
-                  </div>
+                  </div>}
                 </div>
               </>
             ) : (
@@ -147,6 +176,28 @@ export default function Navbar() {
           </Link>
         </div>
       </div>
+
+      <nav aria-label="Navegação principal" className="md:hidden fixed inset-x-0 bottom-0 z-50 h-16 bg-white dark:bg-stone-900 border-t border-stone-200 dark:border-stone-700 grid grid-cols-4 pb-[env(safe-area-inset-bottom)]">
+        <Link to="/" className="grid place-items-center content-center gap-1 text-xs text-stone-700 dark:text-stone-200">
+          <HomeIcon size={20}/> Início
+        </Link>
+        <Link to="/carrinho" aria-label="Carrinho" className="relative grid place-items-center content-center gap-1 text-xs text-stone-700 dark:text-stone-200">
+          <ShoppingCart size={20}/> Carrinho
+          {itemCount > 0 && <span className="absolute top-1 right-[28%] text-[10px] font-bold text-brand-700">{itemCount}</span>}
+        </Link>
+        {user ? (
+          <Link to={ordersHref} className="grid place-items-center content-center gap-1 text-xs text-stone-700 dark:text-stone-200">
+            <ClipboardList size={20}/> {ordersLabel}
+          </Link>
+        ) : (
+          <Link to="/login" className="grid place-items-center content-center gap-1 text-xs text-stone-700 dark:text-stone-200">
+            <ClipboardList size={20}/> Entrar
+          </Link>
+        )}
+        <Link to={user ? "/perfil" : "/cadastro"} className="grid place-items-center content-center gap-1 text-xs text-stone-700 dark:text-stone-200">
+          <User size={20}/> {user ? "Perfil" : "Cadastro"}
+        </Link>
+      </nav>
     </header>
   );
 }
