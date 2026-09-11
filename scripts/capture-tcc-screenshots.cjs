@@ -4,18 +4,22 @@ const path = require("node:path");
 const playwrightModule = process.env.MARKFRUIT_PLAYWRIGHT_MODULE;
 const demoPassword = process.env.MARKFRUIT_DEMO_PASSWORD;
 const baseUrl = process.env.MARKFRUIT_BASE_URL || "http://127.0.0.1:5173";
+const captureTheme = process.env.MARKFRUIT_THEME || "light";
+const outputFolder = process.env.MARKFRUIT_OUTPUT_FOLDER || "prints";
 
 if (!playwrightModule) throw new Error("Defina MARKFRUIT_PLAYWRIGHT_MODULE com o caminho do Playwright.");
 if (!demoPassword) throw new Error("Defina MARKFRUIT_DEMO_PASSWORD sem gravar a senha no repositório.");
+if (!["light", "dark"].includes(captureTheme)) throw new Error("MARKFRUIT_THEME deve ser light ou dark.");
+if (!/^[a-z0-9-]+$/i.test(outputFolder)) throw new Error("MARKFRUIT_OUTPUT_FOLDER deve usar apenas letras, números e hífens.");
 
 const { chromium } = require(playwrightModule);
-const outputDir = path.resolve(__dirname, "../docs/tcc/prints");
+const outputDir = path.resolve(__dirname, "../docs/tcc", outputFolder);
 fs.mkdirSync(outputDir, { recursive: true });
 
 async function preparePage(context) {
   const page = await context.newPage();
   await page.goto(baseUrl, { waitUntil: "domcontentloaded" });
-  await page.evaluate(() => localStorage.setItem("markfruit:theme", "light"));
+  await page.evaluate((theme) => localStorage.setItem("markfruit:theme", theme), captureTheme);
   return page;
 }
 
@@ -54,7 +58,7 @@ async function login(page, email) {
   const viewport = { width: 1024, height: 768 };
 
   try {
-    const publicContext = await browser.newContext({ viewport, colorScheme: "light", locale: "pt-BR" });
+    const publicContext = await browser.newContext({ viewport, colorScheme: captureTheme, locale: "pt-BR" });
     const publicPage = await preparePage(publicContext);
     await capture(publicPage, "01-home.png", "/");
     await capture(publicPage, "02-busca.png", "/?q=morango");
@@ -65,7 +69,7 @@ async function login(page, email) {
     await capture(publicPage, "07-carrinho-vazio.png", "/carrinho");
     await publicContext.close();
 
-    const consumerContext = await browser.newContext({ viewport, colorScheme: "light", locale: "pt-BR" });
+    const consumerContext = await browser.newContext({ viewport, colorScheme: captureTheme, locale: "pt-BR" });
     const consumerPage = await preparePage(consumerContext);
     await login(consumerPage, "ana@markfruit.com");
     await capture(consumerPage, "08-perfil-consumidor.png", "/perfil");
@@ -87,12 +91,12 @@ async function login(page, email) {
     await consumerPage.goto(`${baseUrl}/post/4`, { waitUntil: "domcontentloaded" });
     await settle(consumerPage);
     await consumerPage.getByRole("button", { name: "Conversar com o produtor" }).click();
-    await consumerPage.waitForURL(/\/chat\//);
+    await consumerPage.waitForURL(/\/chat\//, { waitUntil: "commit", timeout: 15000 });
     await consumerPage.getByPlaceholder("Digite uma mensagem...").waitFor({ state: "visible", timeout: 15000 });
     await consumerPage.screenshot({ path: path.join(outputDir, "16-chat.png"), fullPage: false });
     await consumerContext.close();
 
-    const producerContext = await browser.newContext({ viewport, colorScheme: "light", locale: "pt-BR" });
+    const producerContext = await browser.newContext({ viewport, colorScheme: captureTheme, locale: "pt-BR" });
     const producerPage = await preparePage(producerContext);
     await login(producerPage, "joaquim@markfruit.com");
     await capture(producerPage, "17-perfil-produtor.png", "/perfil");

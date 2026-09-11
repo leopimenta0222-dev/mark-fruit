@@ -57,12 +57,12 @@ export default function Profile() {
     <div className="max-w-3xl mx-auto px-4 py-8">
       <div className="card p-6 md:p-8">
         <div className="flex items-start gap-4 mb-6">
-          <div className="w-20 h-20 rounded-2xl bg-brand-100 text-brand-700 grid place-items-center text-3xl font-extrabold">
+          <div className="w-20 h-20 rounded-2xl bg-brand-100 text-brand-700 dark:bg-brand-950 dark:text-brand-200 grid place-items-center text-3xl font-extrabold">
             {user.name?.[0]?.toUpperCase()}
           </div>
           <div className="flex-1">
             <h1 className="text-2xl font-bold">{user.name}</h1>
-            <span className="inline-block mt-1 px-3 py-0.5 rounded-full text-xs font-semibold bg-brand-100 text-brand-700">
+            <span className="inline-block mt-1 px-3 py-0.5 rounded-full text-xs font-semibold bg-brand-100 text-brand-700 dark:bg-brand-950 dark:text-brand-200">
               {user.role === "PRODUCER" ? "Produtor" : "Consumidor"}
             </span>
           </div>
@@ -107,23 +107,23 @@ export default function Profile() {
             </div>
           </div>
         ) : (
-          <div className="space-y-3 text-stone-700">
+          <div className="space-y-3 text-stone-700 dark:text-stone-200">
             <div className="flex items-center gap-2"><Mail size={16} className="text-stone-400"/> {user.email}</div>
             {user.phone && <div className="flex items-center gap-2"><Phone size={16} className="text-stone-400"/> {user.phone}</div>}
             {(user.city || user.state) && (
               <div className="flex items-center gap-2"><MapPin size={16} className="text-stone-400"/> {[user.city, user.state].filter(Boolean).join(" - ")}</div>
             )}
             {user.bio && (
-              <div className="pt-3 border-t border-stone-100">
-                <p className="text-sm text-stone-500 mb-1">Sobre</p>
+              <div className="pt-3 border-t border-stone-100 dark:border-stone-700">
+                <p className="text-sm text-stone-500 dark:text-stone-400 mb-1">Sobre</p>
                 <p>{user.bio}</p>
               </div>
             )}
-            <div className="pt-4 border-t border-stone-100">
+            <div className="pt-4 border-t border-stone-100 dark:border-stone-700">
               <button onClick={useMyLocation} className="btn-secondary">
                 <MapPin size={16}/> Atualizar minha localização
               </button>
-              <p className="text-xs text-stone-500 mt-2">
+              <p className="text-xs text-stone-500 dark:text-stone-400 mt-2">
                 Sua localização ajuda a mostrar produtos próximos.
               </p>
             </div>

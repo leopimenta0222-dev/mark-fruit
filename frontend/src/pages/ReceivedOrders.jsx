@@ -53,7 +53,7 @@ export default function ReceivedOrders() {
           <div>
             <p className="text-sm font-bold text-brand-700">Área do produtor</p>
             <h1 className="text-3xl font-extrabold tracking-tight">Pedidos recebidos</h1>
-            <p className="mt-1 text-stone-500">Organize o preparo e mantenha o consumidor atualizado.</p>
+            <p className="mt-1 text-stone-500 dark:text-stone-400">Organize o preparo e mantenha o consumidor atualizado.</p>
           </div>
           {!loading && orders.length > 0 && (
             <div className="rounded-2xl bg-brand-900 px-5 py-3 text-white">
@@ -64,13 +64,13 @@ export default function ReceivedOrders() {
         </header>
 
         {error && <div role="alert" className="mb-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-800">{error}</div>}
-        {loading && <div className="card p-8 text-center text-stone-500">Carregando pedidos...</div>}
+        {loading && <div className="card p-8 text-center text-stone-500 dark:text-stone-400">Carregando pedidos...</div>}
 
         {!loading && orders.length === 0 && !error && (
           <div className="card p-8 md:p-12 text-center">
             <Store size={42} className="mx-auto text-brand-700" />
             <h2 className="mt-4 text-2xl font-extrabold">Nenhum pedido recebido</h2>
-            <p className="mt-2 text-stone-500">Seus próximos pedidos aparecerão aqui assim que um consumidor finalizar a compra.</p>
+            <p className="mt-2 text-stone-500 dark:text-stone-400">Seus próximos pedidos aparecerão aqui assim que um consumidor finalizar a compra.</p>
             <Link to="/posts/novo" className="btn-primary mt-6">Criar anúncio</Link>
           </div>
         )}
@@ -81,15 +81,15 @@ export default function ReceivedOrders() {
               <article key={order.id} className="card p-5 md:p-6 flex flex-col">
                 <div className="flex justify-between gap-3">
                   <div>
-                    <p className="text-xs font-bold uppercase tracking-wider text-stone-500">Pedido #{order.id}</p>
+                    <p className="text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400">Pedido #{order.id}</p>
                     <h2 className="mt-1 text-xl font-extrabold">{order.buyer?.name || "Consumidor"}</h2>
-                    <p className="mt-1 text-sm text-stone-500">{formatDate(order.createdAt)}</p>
+                    <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">{formatDate(order.createdAt)}</p>
                   </div>
                   <OrderStatus status={order.status} compact />
                 </div>
                 <div className="my-5 flex-1 rounded-xl bg-stone-50 dark:bg-stone-950 p-4">
                   {order.items.map((item) => <p key={item.id} className="text-sm"><strong>{item.quantity}×</strong> {item.title}</p>)}
-                  <p className="mt-3 border-t border-stone-200 pt-3 text-right font-extrabold">{formatCurrency(order.total)}</p>
+                  <p className="mt-3 border-t border-stone-200 dark:border-stone-700 pt-3 text-right font-extrabold">{formatCurrency(order.total)}</p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-2">
                   {actionLabel(order) && (
