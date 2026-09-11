@@ -108,11 +108,11 @@ export function makeOrdersService(client) {
   }
 
   async function advanceOrderStatus(id) {
-    const { data, error } = await client.rpc("advance_order_status", {
+    const { error } = await client.rpc("advance_order_status", {
       target_order_id: id,
     });
     if (error) throw orderError(error);
-    return mapOrder(data);
+    return getOrder(id);
   }
 
   return {

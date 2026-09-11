@@ -85,10 +85,6 @@ export default function PostDetail() {
   }
 
   function handleBuy(tipo) {
-    if (!user) {
-      navigate("/login", { state: { from: `/post/${post.id}` } });
-      return;
-    }
     addItem(post, qty);
     if (tipo === "buy") {
       navigate("/checkout");
@@ -125,7 +121,7 @@ export default function PostDetail() {
                 <img
                   src={resolveImage(post.image)}
                   alt={post.title}
-                  className="w-full aspect-square object-cover rounded-lg"
+                  className="w-full aspect-[4/3] sm:aspect-[16/9] lg:aspect-square object-contain rounded-lg"
                 />
               </div>
             </div>

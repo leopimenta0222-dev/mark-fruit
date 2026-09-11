@@ -4,9 +4,10 @@ import { beforeEach, expect, it, vi } from "vitest";
 import PostDetail from "./PostDetail.jsx";
 
 const addItem = vi.fn();
+const authState = vi.hoisted(() => ({ user: { id: "buyer", name: "Ana", role: "CONSUMER" } }));
 
 vi.mock("../context/AuthContext.jsx", () => ({
-  useAuth: () => ({ user: { id: "buyer", name: "Ana", role: "CONSUMER" } }),
+  useAuth: () => ({ user: authState.user }),
 }));
 
 vi.mock("../context/CartContext.jsx", () => ({
@@ -44,7 +45,10 @@ function renderPage() {
   );
 }
 
-beforeEach(() => addItem.mockClear());
+beforeEach(() => {
+  addItem.mockClear();
+  authState.user = { id: "buyer", name: "Ana", role: "CONSUMER" };
+});
 
 it("adiciona a quantidade escolhida ao carrinho e confirma a ação", async () => {
   renderPage();
@@ -64,4 +68,15 @@ it("adiciona o produto e abre o checkout ao comprar agora", async () => {
 
   expect(addItem).toHaveBeenCalledWith(expect.objectContaining({ id: 1 }), 1);
   expect(screen.getByRole("heading", { name: "Checkout aberto" })).toBeVisible();
+});
+
+it("permite ao visitante montar o carrinho antes de entrar", async () => {
+  authState.user = null;
+  renderPage();
+  await screen.findByRole("heading", { name: "Tomate orgânico 1kg" });
+
+  fireEvent.click(screen.getByRole("button", { name: "Adicionar ao carrinho" }));
+
+  expect(addItem).toHaveBeenCalledWith(expect.objectContaining({ id: 1 }), 1);
+  expect(screen.getByRole("status")).toHaveTextContent("Produto adicionado ao carrinho");
 });

@@ -94,7 +94,7 @@ export default function Navbar() {
           </Link>
 
           {/* Right area */}
-          <div className="hidden md:flex items-center gap-1 shrink-0">
+          <div className="hidden xl:flex items-center gap-1 shrink-0">
             {user ? (
               <>
                 <Link to="/chats" className="px-3 py-2 rounded-lg hover:bg-brand-700 flex items-center gap-1 text-sm">
@@ -177,7 +177,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      <nav aria-label="Navegação principal" className="md:hidden fixed inset-x-0 bottom-0 z-50 h-16 bg-white dark:bg-stone-900 border-t border-stone-200 dark:border-stone-700 grid grid-cols-4 pb-[env(safe-area-inset-bottom)]">
+      <nav aria-label="Navegação principal" className={`xl:hidden fixed inset-x-0 bottom-0 z-50 h-16 bg-white dark:bg-stone-900 border-t border-stone-200 dark:border-stone-700 grid ${user?.role === "PRODUCER" ? "grid-cols-5" : "grid-cols-4"} pb-[env(safe-area-inset-bottom)]`}>
         <Link to="/" className="grid place-items-center content-center gap-1 text-xs text-stone-700 dark:text-stone-200">
           <HomeIcon size={20}/> Início
         </Link>
@@ -186,12 +186,17 @@ export default function Navbar() {
           {itemCount > 0 && <span className="absolute top-1 right-[28%] text-[10px] font-bold text-brand-700">{itemCount}</span>}
         </Link>
         {user ? (
-          <Link to={ordersHref} className="grid place-items-center content-center gap-1 text-xs text-stone-700 dark:text-stone-200">
-            <ClipboardList size={20}/> {ordersLabel}
+          <Link to={ordersHref} aria-label={ordersLabel} className="grid place-items-center content-center gap-1 text-xs text-stone-700 dark:text-stone-200">
+            <ClipboardList size={20}/> Pedidos
           </Link>
         ) : (
           <Link to="/login" className="grid place-items-center content-center gap-1 text-xs text-stone-700 dark:text-stone-200">
             <ClipboardList size={20}/> Entrar
+          </Link>
+        )}
+        {user?.role === "PRODUCER" && (
+          <Link to="/posts/novo" className="grid place-items-center content-center gap-1 text-xs text-stone-700 dark:text-stone-200">
+            <Plus size={20}/> Anunciar
           </Link>
         )}
         <Link to={user ? "/perfil" : "/cadastro"} className="grid place-items-center content-center gap-1 text-xs text-stone-700 dark:text-stone-200">

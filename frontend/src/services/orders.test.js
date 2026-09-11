@@ -75,3 +75,36 @@ describe("mapOrder", () => {
     });
   });
 });
+
+describe("advanceOrderStatus", () => {
+  it("recarrega o pedido completo depois de avançar o status", async () => {
+    const rpcCalls = [];
+    const fullOrder = {
+      id: 5,
+      status: "PREPARING",
+      subtotal: "17.80",
+      total: "17.80",
+      delivery_address: {},
+      buyer: { name: "Ana Consumidora" },
+      items: [{ id: 1, title: "Goiaba vermelha 1kg", quantity: 2, unit_price: "8.90", subtotal: "17.80" }],
+    };
+    const client = {
+      rpc: async (name, payload) => { rpcCalls.push({ name, payload }); return { data: { id: 5, status: "PREPARING" }, error: null }; },
+      from: () => ({
+        select: () => ({
+          eq: () => ({ single: async () => ({ data: fullOrder, error: null }) }),
+        }),
+      }),
+    };
+
+    const updated = await makeOrdersService(client).advanceOrderStatus(5);
+
+    expect(rpcCalls).toEqual([{ name: "advance_order_status", payload: { target_order_id: 5 } }]);
+    expect(updated).toMatchObject({
+      id: 5,
+      status: "PREPARING",
+      buyer: { name: "Ana Consumidora" },
+      items: [{ title: "Goiaba vermelha 1kg", quantity: 2 }],
+    });
+  });
+});

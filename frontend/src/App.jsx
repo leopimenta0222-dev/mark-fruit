@@ -16,6 +16,7 @@ import OrderConfirmation from "./pages/OrderConfirmation.jsx";
 import Orders from "./pages/Orders.jsx";
 import ReceivedOrders from "./pages/ReceivedOrders.jsx";
 import OrderDetail from "./pages/OrderDetail.jsx";
+import NotFound from "./pages/NotFound.jsx";
 
 export default function App() {
   return (
@@ -39,7 +40,7 @@ export default function App() {
           <Route path="/posts/novo" element={<PrivateRoute producerOnly><NewPost /></PrivateRoute>} />
           <Route path="/chats" element={<PrivateRoute><Conversations /></PrivateRoute>} />
           <Route path="/chat/:postId/:otherUserId" element={<PrivateRoute><Chat /></PrivateRoute>} />
-          <Route path="*" element={<div className="p-8 text-center">Página não encontrada</div>} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <footer className="border-t border-stone-100 bg-white dark:bg-stone-900 dark:border-stone-800 py-6 text-center text-sm text-stone-500 dark:text-stone-400">

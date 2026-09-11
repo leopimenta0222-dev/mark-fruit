@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import Navbar from "./Navbar.jsx";
@@ -59,5 +59,13 @@ describe("Navbar", () => {
 
     expect(accountButton).toHaveAttribute("aria-expanded", "true");
     expect(screen.getByRole("link", { name: "Meu perfil" })).toBeVisible();
+  });
+
+  it("mantém a ação de anunciar na navegação compacta do produtor", () => {
+    currentUser = { id: "producer", name: "Joaquim", role: "PRODUCER" };
+    renderNavbar();
+
+    const compactNavigation = screen.getByRole("navigation", { name: "Navegação principal" });
+    expect(within(compactNavigation).getByRole("link", { name: "Anunciar" })).toHaveAttribute("href", "/posts/novo");
   });
 });
