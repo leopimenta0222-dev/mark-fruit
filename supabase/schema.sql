@@ -1,8 +1,8 @@
 -- ============================================================
 -- Mark Fruit — schema do banco (Supabase / PostgreSQL)
 -- Rode este arquivo inteiro no SQL Editor do Supabase.
--- É a "fonte da verdade" da estrutura: se precisar recriar o
--- banco do zero, é só rodar este arquivo de novo.
+-- Este arquivo cria a base histórica. Para recriar o banco do zero,
+-- rode este arquivo e depois os arquivos de supabase/migrations em ordem.
 -- ============================================================
 
 -- ----------------------------------------------------------------
@@ -240,5 +240,6 @@ create policy "post_images_delete" on storage.objects
   );
 
 -- ============================================================
--- Fim do schema. Depois rode o seed.sql para popular os produtos.
+-- Fim do schema base. Aplique supabase/migrations em ordem e depois
+-- rode o seed para popular os produtos e contas de demonstração.
 -- ============================================================
