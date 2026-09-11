@@ -13,6 +13,9 @@ import Chat from "./pages/Chat.jsx";
 import Cart from "./pages/Cart.jsx";
 import Checkout from "./pages/Checkout.jsx";
 import OrderConfirmation from "./pages/OrderConfirmation.jsx";
+import Orders from "./pages/Orders.jsx";
+import ReceivedOrders from "./pages/ReceivedOrders.jsx";
+import OrderDetail from "./pages/OrderDetail.jsx";
 
 export default function App() {
   return (
@@ -28,6 +31,10 @@ export default function App() {
           <Route path="/carrinho" element={<Cart />} />
           <Route path="/checkout" element={<PrivateRoute><Checkout /></PrivateRoute>} />
           <Route path="/pedido-confirmado" element={<PrivateRoute><OrderConfirmation /></PrivateRoute>} />
+          <Route path="/pedidos" element={<PrivateRoute><Orders /></PrivateRoute>} />
+          <Route path="/pedidos/:id" element={<PrivateRoute><OrderDetail /></PrivateRoute>} />
+          <Route path="/pedidos-recebidos" element={<PrivateRoute producerOnly><ReceivedOrders /></PrivateRoute>} />
+          <Route path="/pedidos-recebidos/:id" element={<PrivateRoute producerOnly><OrderDetail /></PrivateRoute>} />
           <Route path="/perfil" element={<PrivateRoute><Profile /></PrivateRoute>} />
           <Route path="/posts/novo" element={<PrivateRoute producerOnly><NewPost /></PrivateRoute>} />
           <Route path="/chats" element={<PrivateRoute><Conversations /></PrivateRoute>} />
