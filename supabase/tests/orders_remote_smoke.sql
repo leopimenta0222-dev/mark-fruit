@@ -20,14 +20,18 @@ select public.create_checkout(
 ) as payload;
 
 do $$
+declare
+  v_order_id bigint := (
+    select (payload->'orderIds'->>0)::bigint from checkout_result
+  );
 begin
   if (select jsonb_array_length(payload->'orderIds') from checkout_result) <> 1 then
     raise exception 'checkout did not create exactly one order';
   end if;
-  if (select count(*) from public.orders) <> 1 then
+  if (select count(*) from public.orders where id = v_order_id) <> 1 then
     raise exception 'buyer cannot read the created order';
   end if;
-  if (select count(*) from public.order_items) <> 1 then
+  if (select count(*) from public.order_items where order_id = v_order_id) <> 1 then
     raise exception 'buyer cannot read the created order item';
   end if;
 end;
@@ -62,11 +66,15 @@ select set_config(
 );
 
 do $$
+declare
+  v_order_id bigint := (
+    select (payload->'orderIds'->>0)::bigint from checkout_result
+  );
 begin
-  if (select count(*) from public.orders) <> 0 then
+  if (select count(*) from public.orders where id = v_order_id) <> 0 then
     raise exception 'unrelated consumer can read another buyer order';
   end if;
-  if (select count(*) from public.order_items) <> 0 then
+  if (select count(*) from public.order_items where order_id = v_order_id) <> 0 then
     raise exception 'unrelated consumer can read another buyer order items';
   end if;
 end;
@@ -84,7 +92,7 @@ declare
     select (payload->'orderIds'->>0)::bigint from checkout_result
   );
 begin
-  if (select count(*) from public.orders) <> 0 then
+  if (select count(*) from public.orders where id = v_order_id) <> 0 then
     raise exception 'unrelated producer can read another producer order';
   end if;
   begin
