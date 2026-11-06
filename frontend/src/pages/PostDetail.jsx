@@ -19,6 +19,10 @@ function fmtDate(d) {
 
 export default function PostDetail() {
   const { id } = useParams();
+  return <PostDetailContent key={id} id={id} />;
+}
+
+function PostDetailContent({ id }) {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { addItem } = useCart();
@@ -49,6 +53,8 @@ export default function PostDetail() {
       } else {
         setStars(0); setComment("");
       }
+    } catch {
+      setPost(null);
     } finally {
       setLoading(false);
     }
@@ -93,7 +99,21 @@ export default function PostDetail() {
     setBuyMsg("Produto adicionado ao carrinho.");
   }
 
-  if (loading || !post) return <div className="p-8 text-center text-stone-500">Carregando...</div>;
+  if (loading) return <div className="p-8 text-center text-stone-500">Carregando...</div>;
+
+  if (!post) {
+    return (
+      <div className="min-h-[60vh] px-4 grid place-items-center text-center">
+        <div className="card max-w-lg p-8">
+          <h1 className="text-2xl font-extrabold">Anúncio indisponível</h1>
+          <p className="mt-2 text-stone-500 dark:text-stone-400">
+            O anúncio pode ter sido removido ou estar temporariamente indisponível.
+          </p>
+          <Link to="/" className="btn-primary mt-6">Voltar aos produtos</Link>
+        </div>
+      </div>
+    );
+  }
 
   const isOwner = user?.id === post.author.id;
   const myRating = post.ratings.find((r) => r.userId === user?.id);

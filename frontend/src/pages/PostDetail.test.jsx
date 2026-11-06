@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { beforeEach, expect, it, vi } from "vitest";
 import PostDetail from "./PostDetail.jsx";
+import { getPost } from "../services/db.js";
 
 const addItem = vi.fn();
 const authState = vi.hoisted(() => ({ user: { id: "buyer", name: "Ana", role: "CONSUMER" } }));
@@ -15,7 +16,7 @@ vi.mock("../context/CartContext.jsx", () => ({
 }));
 
 vi.mock("../services/db.js", () => ({
-  getPost: async () => ({
+  getPost: vi.fn(async () => ({
     id: 1,
     title: "Tomate orgânico 1kg",
     description: "Colhido no dia.",
@@ -28,7 +29,7 @@ vi.mock("../services/db.js", () => ({
     averageRating: 0,
     ratingCount: 0,
     ratings: [],
-  }),
+  })),
   ratePost: vi.fn(),
   deleteRating: vi.fn(),
   deletePost: vi.fn(),
@@ -79,4 +80,13 @@ it("permite ao visitante montar o carrinho antes de entrar", async () => {
 
   expect(addItem).toHaveBeenCalledWith(expect.objectContaining({ id: 1 }), 1);
   expect(screen.getByRole("status")).toHaveTextContent("Produto adicionado ao carrinho");
+});
+
+it("oferece uma saída quando o anúncio não está disponível", async () => {
+  getPost.mockRejectedValueOnce({ code: "PGRST116" });
+  renderPage();
+
+  expect(await screen.findByRole("heading", { name: "Anúncio indisponível" })).toBeVisible();
+  expect(screen.queryByText("Carregando...")).not.toBeInTheDocument();
+  expect(screen.getByRole("link", { name: "Voltar aos produtos" })).toHaveAttribute("href", "/");
 });

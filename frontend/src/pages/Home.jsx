@@ -18,6 +18,7 @@ const CATEGORIES = [
 export default function Home() {
   const [allPosts, setAllPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadFailed, setLoadFailed] = useState(false);
   const [coords, setCoords] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const q = searchParams.get("q") || "";
@@ -35,27 +36,21 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    fetchPosts();
-  }, [q, filterCategory, coords]);
-
-  async function fetchPosts() {
+    let active = true;
     setLoading(true);
-    try {
-      const data = await listPosts({
-        sort: "best",
-        q: q || undefined,
-        category: filterCategory || undefined,
-        lat: coords?.lat,
-        lon: coords?.lon,
-      });
-      setAllPosts(data);
-    } catch (err) {
-      console.error(err);
-      setAllPosts([]);
-    } finally {
-      setLoading(false);
-    }
-  }
+    setLoadFailed(false);
+    listPosts({
+      sort: "best",
+      q: q || undefined,
+      category: filterCategory || undefined,
+      lat: coords?.lat,
+      lon: coords?.lon,
+    })
+      .then((data) => { if (active) setAllPosts(data); })
+      .catch(() => { if (active) setLoadFailed(true); })
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, [q, filterCategory, coords]);
 
   // Prateleiras
   const topRated = useMemo(() =>
@@ -159,9 +154,11 @@ export default function Home() {
                 <h1 className="text-2xl font-bold dark:text-stone-100">
                   {q ? `Resultados para "${q}"` : `Categoria: ${filterCategory}`}
                 </h1>
-                <p className="text-sm text-stone-500 dark:text-stone-400 mt-0.5">
-                  {allPosts.length} {allPosts.length === 1 ? "produto encontrado" : "produtos encontrados"}
-                </p>
+                {!loading && !loadFailed && (
+                  <p className="text-sm text-stone-500 dark:text-stone-400 mt-0.5">
+                    {allPosts.length} {allPosts.length === 1 ? "produto encontrado" : "produtos encontrados"}
+                  </p>
+                )}
               </div>
               <button
                 onClick={() => setSearchParams({})}
@@ -171,7 +168,7 @@ export default function Home() {
               </button>
             </div>
 
-            {loading ? (
+            {loadFailed ? null : loading ? (
               <SkeletonGrid/>
             ) : allPosts.length === 0 ? (
               <div className="text-center py-12 text-stone-500 dark:text-stone-400">
@@ -187,7 +184,7 @@ export default function Home() {
         )}
 
         {/* Prateleiras (só na home sem filtro) */}
-        {!isFiltering && (
+        {!isFiltering && !loadFailed && (
           loading ? (
             <SkeletonShelf/>
           ) : (
@@ -236,6 +233,11 @@ export default function Home() {
               />
             </>
           )
+        )}
+        {loadFailed && (
+          <p role="alert" className="card p-5 text-stone-600 dark:text-stone-300">
+            Não foi possível carregar os produtos. Atualize a página para tentar novamente.
+          </p>
         )}
       </div>
     </div>
